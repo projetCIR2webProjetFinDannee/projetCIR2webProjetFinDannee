@@ -1,0 +1,11 @@
+.fullwidth-banner {
+    display: block;
+    width: 100vw;            /* pleine largeur de l’écran */
+    max-width: 100%;
+    margin: 0;               /* supprime les marges */
+    padding: 0;
+    border: none;
+    border-radius: 0;        /* pas d'arrondis */
+    box-shadow: none;        /* pas d’ombre */
+    object-fit: cover;       /* utile si tu veux qu'elle couvre bien même en height fixée */
+}
