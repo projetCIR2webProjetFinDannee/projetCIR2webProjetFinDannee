@@ -8,208 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary-color: #4dd0e1;
-            --secondary-color: #26c6da;
-            --tertiary-color: #00acc1;
-        }
-
-        body {
-            background: linear-gradient(135deg, #e8f5ff 0%, #f0e8ff 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .navbar-custom {
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .navbar-nav .nav-link {
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-            margin: 0 5px;
-        }
-
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        .search-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .search-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-
-        .form-control-custom {
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            padding: 12px 20px;
-            transition: all 0.3s ease;
-            background-color: rgba(255,255,255,0.9);
-        }
-
-        .form-control-custom:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(77, 208, 225, 0.25);
-            background-color: white;
-        }
-
-        .btn-search {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.3);
-        }
-
-        .btn-search:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(77, 208, 225, 0.4);
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--tertiary-color) 100%);
-        }
-
-        .btn-search:active {
-            transform: translateY(-1px);
-        }
-
-        .results-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border-radius: 20px;
-        }
-
-        .result-item {
-            background: linear-gradient(135deg, #f0fdff 0%, #e8f9fa 100%);
-            border: 2px solid var(--primary-color);
-            border-radius: 15px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .result-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .result-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
-            border-color: var(--secondary-color);
-        }
-
-        .result-item:hover::before {
-            left: 100%;
-        }
-
-        .result-item.selected {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            transform: scale(0.98);
-        }
-
-        .footer-custom {
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
-            color: white;
-            margin-top: 50px;
-        }
-
-        .footer-custom a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-        }
-
-        .footer-custom a:hover {
-            color: white;
-            text-decoration: underline;
-        }
-
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #e8f5ff, #f0e8ff, #e8f5ff, #f0e8ff);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .toast-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            color: white;
-        }
-
-        .loading-spinner {
-            display: none;
-        }
-
-        .icon-custom {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            margin-right: 10px;
-        }
-    </style>
+    <!-- CSS commun -->
+    <link rel="stylesheet" href="../css/recherche.css">
 </head>
 <body>
     <div class="animated-bg"></div>
@@ -219,7 +19,7 @@
         <div class="container">
             <a class="navbar-brand" href="#">
                 <i class="bi bi-lightning-charge"></i>
-                PHOTOVOLTAÏQUE
+                PHOTOVOLTIS
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -344,24 +144,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-wrap justify-content-center gap-4 mb-3">
-                        <a href="#" onclick="showToast('Contact')">
-                            <i class="bi bi-envelope me-1"></i>Contact
-                        </a>
-                        <a href="#" onclick="showToast('Chantier')">
-                            <i class="bi bi-tools me-1"></i>Chantier
-                        </a>
-                        <a href="#" onclick="showToast('Mentions légales')">
-                            <i class="bi bi-shield-check me-1"></i>Mentions légales
-                        </a>
-                        <a href="#" onclick="showToast('Réseau social')">
-                            <i class="bi bi-share me-1"></i>Réseau social
-                        </a>
-                        <a href="#" onclick="showToast('Carte')">
-                            <i class="bi bi-map me-1"></i>Carte
-                        </a>
+                        <p>
+                            Mathis CHARTIER / Mathieu GICQUEL--BOURDEAU / Alexis ROCHON--SANZ
+                        <p>
                     </div>
                     <div class="text-center">
-                        <small>&copy; IES 2024 - Tous droits réservés</small>
+                        <small>CIR2 2024/2025</small>
                     </div>
                 </div>
             </div>
