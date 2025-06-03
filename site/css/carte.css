@@ -1,0 +1,176 @@
+#map {
+            height: 600px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title-main {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .icon-title {
+            color: var(--secondary-color);
+            margin-right: 15px;
+            font-size: 2.2rem;
+        }
+
+        .icon-custom {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .search-card, .results-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-card:hover, .results-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-control-custom, .form-select {
+            border: 2px solid rgba(40, 193, 185, 0.3);
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control-custom:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(40, 193, 185, 0.25);
+            background: white;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 15px;
+            padding: 12px 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 193, 185, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 193, 185, 0.4);
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+        }
+
+        .loading-spinner {
+            display: none;
+        }
+
+        .btn-search.loading .search-text {
+            display: none;
+        }
+
+        .btn-search.loading .loading-spinner {
+            display: inline;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .loading {
+            display: none;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .custom-popup {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .popup-title {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .popup-info {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .popup-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .popup-link:hover {
+            background: var(--secondary-color);
+            color: white;
+        }

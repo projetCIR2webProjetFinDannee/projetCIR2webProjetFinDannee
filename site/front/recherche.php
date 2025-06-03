@@ -9,8 +9,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- CSS commun -->
-    <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/nav-bar.css">
+    <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
 </head>
 <body>
@@ -19,7 +18,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="accueil.php">
                 <i class="bi bi-lightning-charge"></i>
                 PHOTOVOLTIS
             </a>
@@ -106,6 +105,15 @@
                     </div>
                     <div class="card-body p-4">
                         <div id="resultsContainer">
+                            <div class="result-item mb-3" onclick="selectResult(this)">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-file-earmark-text me-3 text-primary"></i>
+                                    <div>
+                                        <strong>Installation #1</strong><br>
+                                        <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,14 +122,14 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-custom py-4 mt-auto">
+    <footer class="footer-custom py-4">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-wrap justify-content-center gap-4 mb-3">
                         <p>
                             Mathis CHARTIER / Mathieu GICQUEL--BOURDEAU / Alexis ROCHON--SANZ
-                        </p>
+                        <p>
                     </div>
                     <div class="text-center">
                         <small>CIR2 2024/2025</small>
@@ -130,33 +138,7 @@
             </div>
         </div>
     </footer>
-    <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .footer-custom {
-            margin-top: auto;
-        }
-    </style>
 
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="liveToast" class="toast toast-custom" role="alert">
-            <div class="toast-header bg-transparent border-0 text-white">
-                <i class="bi bi-info-circle me-2"></i>
-                <strong class="me-auto">Information</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body" id="toastMessage">
-                Message par défaut
-            </div>
-        </div>
-    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>

@@ -11,8 +11,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     
     <!-- CSS commun -->
-    <link href="../css/footer.css" rel="stylesheet">
-    <link href="../css/nav-bar.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/commun.css">
+    <link rel="stylesheet" href="../css/accueil.css">
     
 </head>
 <body>
@@ -56,7 +56,7 @@
         <h2 class="mb-4 text-center">Bienvenue sur PHOTOVOLTIS</h2>
         <p class="text-muted text-center">Plateforme d’analyse des installations photovoltaïques en France.</p>
         <div class="text-center my-4">
-            <img src="panneaux.jpg" alt="Panneaux solaires" class="img-fluid rounded shadow">
+            <img src="../../images/panneaux-solaires.jpg" alt="Panneaux solaires" class="fullwidth-banner">
         </div>
     </div>
 
@@ -70,20 +70,20 @@
             </div>
             <div class="card-body p-4">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Nombre d’enregistrements en base</li>
-                    <li class="list-group-item">Nombre d’installations par années</li>
-                    <li class="list-group-item">Nombre d’installations par région</li>
-                    <li class="list-group-item">Nombre d’installations par années et régions</li>
-                    <li class="list-group-item">Nombre d’installateurs</li>
-                    <li class="list-group-item">Nombre de marques d’onduleurs</li>
-                    <li class="list-group-item">Nombre de marques de panneaux solaires</li>
+                    <li class="list-group-item">Nombre d’enregistrements en base :</li>
+                    <li class="list-group-item">Nombre d’installations par années :</li>
+                    <li class="list-group-item">Nombre d’installations par région :</li>
+                    <li class="list-group-item">Nombre d’installations par années et régions :</li>
+                    <li class="list-group-item">Nombre d’installateurs :</li>
+                    <li class="list-group-item">Nombre de marques d’onduleurs :</li>
+                    <li class="list-group-item">Nombre de marques de panneaux solaires :</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="footer-custom py-4">
+    <footer class="footer-custom py-4 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-12">
