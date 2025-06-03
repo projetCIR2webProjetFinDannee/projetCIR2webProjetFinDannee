@@ -184,11 +184,14 @@ function showDetailPage(installationId) {
                         <div class="col-lg-10">
                             <!-- Header avec bouton retour -->
                             <div class="d-flex align-items-center mb-4">
-                                <button class="btn btn-outline-primary me-3" onclick="hideDetailPage()">
-                                    <i class="bi bi-arrow-left me-2"></i>Retour à la recherche
+                                <button class="tn btn-primary btn-search btn-lg" onclick="hideDetailPage()">
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    <small>
+                                    Retour à la recherche
+                                    </small>
                                 </button>
                                 <h2 class="mb-0">
-                                    <i class="bi bi-info-circle icon-custom"></i>Détail de l'installation
+                                    Détail de l'installation
                                 </h2>
                             </div>
 
@@ -269,7 +272,7 @@ function showDetailPage(installationId) {
 
                             <!-- Actions -->
                             <div class="text-center">
-                                <button class="btn btn-primary me-3">
+                                <button class="btn btn-primary me-3" onclick="generatePDF(detailData[${installationId}])">
                                     <i class="bi bi-download me-2"></i>Télécharger le rapport PDF
                                 </button>
                             </div>
@@ -308,3 +311,79 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+async function downloadPDF(id) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const data = {
+        1: { titre: "Installation INST-2024-001", details: "12 panneaux SunPower - 5.2 kW à Quimper" },
+        2: { titre: "Installation INST-2024-002", details: "8 panneaux LG - 3.8 kW à Rennes" },
+        3: { titre: "Installation INST-2024-003", details: "16 panneaux Jinko - 6.4 kW à Lorient" }
+    };
+
+    const info = data[id];
+    if (!info) {
+        alert("Données manquantes pour générer le PDF.");
+        return;
+    }
+
+    doc.setFontSize(16);
+    doc.text(info.titre, 20, 20);
+    doc.setFontSize(12);
+    doc.text(info.details, 20, 40);
+
+    doc.save(`Rapport_${info.titre.replace(/\s+/g, "_")}.pdf`);
+}
+
+let detailData = {};
+
+async function generatePDF(data) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Titre
+    doc.setFontSize(18);
+    doc.text(`Rapport d'installation - ${data.id}`, 20, 20);
+
+    // Informations principales
+    doc.setFontSize(12);
+    doc.text(`Date d'installation : ${data.date}`, 20, 30);
+    doc.text(`Adresse : ${data.adresse}`, 20, 40);
+    doc.text(`Coordonnées GPS : ${data.latitude}, ${data.longitude}`, 20, 50);
+    
+    // Caractéristiques techniques
+    doc.autoTable({
+        startY: 60,
+        head: [['Catégorie', 'Valeur']],
+        body: [
+            ['Surface', data.surface],
+            ['Puissance totale', data.puissance],
+            ['Nombre de panneaux', data.nbPanneaux],
+            ['Nombre d’ondulateurs', data.nbOndulateurs],
+            ['Orientation', data.orientation],
+            ['Inclinaison', data.inclinaison],
+            ['Marque Onduleur', data.marqueOnduleur],
+            ['Modèle Onduleur', data.modeleOnduleur],
+            ['Marque Panneaux', data.marquePanneaux],
+            ['Modèle Panneaux', data.modelePanneaux],
+        ],
+    });
+
+    // Performances estimées
+    doc.autoTable({
+        startY: doc.lastAutoTable.finalY + 10,
+        head: [['Indicateur', 'Valeur']],
+        body: [
+            ['Production annuelle estimée', data.productionAnnuelle],
+            ['Économies annuelles', data.economieAnnuelle],
+            ['CO₂ évité par an', data.co2Evite],
+        ],
+    });
+
+    // Installateur
+    doc.text(`Installateur : ${data.installateur}`, 20, doc.lastAutoTable.finalY + 20);
+
+    // Sauvegarde du fichier
+    doc.save(`rapport-${data.id}.pdf`);
+}
