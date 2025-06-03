@@ -287,7 +287,7 @@ function showDetailPage(installationId) {
 
             // Masquer le contenu principal et afficher les détails
             document.querySelector('.container.my-5').style.display = 'none';
-            document.querySelector('.').style.display = 'none';
+            document.querySelector('.footer-custom').style.display = 'none';
             document.body.insertAdjacentHTML('beforeend', `<div id="detailPage">${detailHTML}</div>`);
             
             // Scroll vers le haut
@@ -300,6 +300,7 @@ function showDetailPage(installationId) {
                 detailPage.remove();
             }
             document.querySelector('.container.my-5').style.display = 'block';
+            document.querySelector('.footer-custom').style.display = 'block';
         }
 
 // Add smooth scrolling
