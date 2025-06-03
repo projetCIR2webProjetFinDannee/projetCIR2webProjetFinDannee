@@ -5,12 +5,12 @@
     <title>PHOTOVOLTIS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
+    <!-- Inclusion de Bootstrap CSS pour le style -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
+    <!-- Inclusion des icônes Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     
-    <!-- CSS commun -->
+    <!-- Feuilles de style personnalisées -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/accueil.css">
     
@@ -19,16 +19,19 @@
     <!-- Animation de fond -->
     <div class="animated-bg"></div>
 
-    <!-- Navigation -->
+    <!-- Barre de navigation principale -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
+            <!-- Logo et nom du site -->
             <a class="navbar-brand" href="#">
                 <i class="bi bi-lightning-charge"></i>
                 PHOTOVOLTIS
             </a>
+            <!-- Bouton pour menu mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Liens de navigation -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -51,16 +54,17 @@
         </div>
     </nav>
 
-    <!-- Description -->
+    <!-- Section de description et bannière -->
     <div class="container mt-5">
         <h2 class="mb-4 text-center">Bienvenue sur PHOTOVOLTIS</h2>
         <p class="text-muted text-center">Plateforme d’analyse des installations photovoltaïques en France.</p>
         <div class="text-center my-4">
+            <!-- Image de bannière -->
             <img src="../../images/panneaux-solaires.jpg" alt="Panneaux solaires" class="fullwidth-banner">
         </div>
     </div>
 
-    <!-- Statistiques -->
+    <!-- Section des statistiques globales -->
     <div class="container mb-5">
         <div class="card results-card fade-in">
             <div class="card-header bg-transparent border-0 pt-4">
@@ -70,6 +74,7 @@
             </div>
             <div class="card-body p-4">
                 <ul class="list-group list-group-flush">
+                    <!-- Liste des statistiques à afficher -->
                     <li class="list-group-item">Nombre d’enregistrements en base :</li>
                     <li class="list-group-item">Nombre d’installations par années :</li>
                     <li class="list-group-item">Nombre d’installations par région :</li>
@@ -82,11 +87,12 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Pied de page -->
     <footer class="footer-custom py-4 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    <!-- Noms des auteurs -->
                     <div class="d-flex flex-wrap justify-content-center gap-4 mb-3">
                         <p>Mathis CHARTIER / Mathieu GICQUEL--BOURDEAU / Alexis ROCHON--SANZ</p>
                     </div>
@@ -98,16 +104,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Inclusion de Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Toast Script -->
-    <script>
-        function showToast(message) {
-            const toast = new bootstrap.Toast(document.getElementById('liveToast'));
-            document.getElementById('toastMessage').textContent = message;
-            toast.show();
-        }
-    </script>
 </body>
 </html>

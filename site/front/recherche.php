@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Métadonnées de la page -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche Photovoltaïque</title>
-    <!-- Bootstrap CSS -->
+    <!-- Liens vers Bootstrap CSS et Bootstrap Icons pour le style -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- CSS commun -->
+    <!-- Feuilles de style personnalisées -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
     <style>
+        /* Styles pour assurer que le footer reste en bas de page */
         html, body {
             height: 100%;
         }
-
         body {
             display: flex;
             flex-direction: column;
         }
-
         .main-content {
             flex: 1;
         }
-
         .footer-custom {
             margin-top: auto;
         }
     </style>
 </head>
 <body>
+    <!-- Fond animé (via CSS) -->
     <div class="animated-bg"></div>
     
-    <!-- Navigation -->
+    <!-- Barre de navigation principale -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
+            <!-- Logo et nom du site -->
             <a class="navbar-brand" href="accueil.php">
                 <i class="bi bi-lightning-charge"></i>
                 PHOTOVOLTIS
             </a>
+            <!-- Bouton pour menu mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Liens de navigation -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -65,15 +67,17 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Contenu principal de la page -->
     <div class="container my-5">
-        <!-- Search Section -->
+        <!-- Section de recherche -->
         <div class="row justify-content-center mb-5">
             <div class="col-lg-10">
                 <div class="card search-card fade-in">
                     <div class="card-body p-4">
+                        <!-- Formulaire de recherche -->
                         <form id="searchForm">
                             <div class="row g-3 align-items-end">
+                                <!-- Champ pour la marque de l'onduleur -->
                                 <div class="col-md-4">
                                     <label for="onduleur" class="form-label">
                                         <i class="bi bi-cpu icon-custom"></i>Marque de l'onduleur
@@ -81,6 +85,7 @@
                                     <input type="text" class="form-control form-control-custom" id="onduleur" 
                                            placeholder="Ex: SMA, Fronius, Huawei...">
                                 </div>
+                                <!-- Champ pour la marque des panneaux -->
                                 <div class="col-md-4">
                                     <label for="panneaux" class="form-label">
                                         <i class="bi bi-grid-3x3-gap icon-custom"></i>Marque des panneaux
@@ -88,6 +93,7 @@
                                     <input type="text" class="form-control form-control-custom" id="panneaux" 
                                            placeholder="Ex: SunPower, LG, Jinko...">
                                 </div>
+                                <!-- Champ pour le département -->
                                 <div class="col-md-4">
                                     <label for="departement" class="form-label">
                                         <i class="bi bi-geo-alt icon-custom"></i>Département
@@ -95,6 +101,7 @@
                                     <input type="text" class="form-control form-control-custom" id="departement" 
                                            placeholder="Ex: 29, 35, 56...">
                                 </div>
+                                <!-- Bouton de soumission du formulaire -->
                                 <div class="col-12 text-center mt-4">
                                     <button type="submit" class="btn btn-primary btn-search btn-lg">
                                         <span class="search-text">
@@ -112,7 +119,7 @@
             </div>
         </div>
 
-        <!-- Results Section -->
+        <!-- Section des résultats de recherche -->
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card results-card fade-in">
@@ -122,6 +129,7 @@
                         </h5>
                     </div>
                     <div class="card-body p-4">
+                        <!-- Conteneur où les résultats seront affichés dynamiquement -->
                         <div id="resultsContainer">
                         </div>
                     </div>
@@ -130,7 +138,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Pied de page -->
     <footer class="footer-custom py-4 mt-auto">
         <div class="container">
             <div class="row">
@@ -148,10 +156,8 @@
         </div>
     </footer>
 
-
-    <!-- Bootstrap JS -->
+    <!-- Scripts JS Bootstrap et script personnalisé pour la recherche -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="../js/recherche.js"></script>
 </body>
 </html>
