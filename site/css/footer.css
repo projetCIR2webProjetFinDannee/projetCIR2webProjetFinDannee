@@ -1,0 +1,24 @@
+:root {
+            --primary-color: #28C1B9;
+            --secondary-color: #26c6da;
+            --tertiary-color: #00acc1;
+        }
+
+        .footer-custom {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
+            color: white;
+            margin-top: 50px;
+        }
+
+        .footer-custom a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .footer-custom a:hover {
+            color: white;
+            text-decoration: underline;
+        }

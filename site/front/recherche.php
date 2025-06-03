@@ -9,6 +9,8 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- CSS commun -->
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/nav-bar.css">
     <link rel="stylesheet" href="../css/recherche.css">
 </head>
 <body>
@@ -109,24 +111,6 @@
                                     <i class="bi bi-file-earmark-text me-3 text-primary"></i>
                                     <div>
                                         <strong>Installation #1</strong><br>
-                                        <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="result-item mb-3" onclick="selectResult(this)">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-file-earmark-text me-3 text-primary"></i>
-                                    <div>
-                                        <strong>Installation #2</strong><br>
-                                        <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="result-item mb-3" onclick="selectResult(this)">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-file-earmark-text me-3 text-primary"></i>
-                                    <div>
-                                        <strong>Installation #3</strong><br>
                                         <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
                                     </div>
                                 </div>
