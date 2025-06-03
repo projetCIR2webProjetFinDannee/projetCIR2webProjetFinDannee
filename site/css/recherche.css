@@ -1,156 +1,156 @@
 :root {
-            --primary-color: #28C1B9;
-            --secondary-color: #26c6da;
-            --tertiary-color: #00acc1;
-        }
+    --primary-color: #28C1B9;
+    --secondary-color: #26c6da;
+    --tertiary-color: #00acc1;
+}
 
-        body {
-            background: linear-gradient(135deg, #e8f5ff 0%, #f0e8ff 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+body {
+    background: linear-gradient(135deg, #e8f5ff 0%, #f0e8ff 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        .search-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
+.search-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
 
-        .search-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
+.search-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
 
-        .form-control-custom {
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            padding: 12px 20px;
-            transition: all 0.3s ease;
-            background-color: rgba(255,255,255,0.9);
-        }
+.form-control-custom {
+    border: 2px solid #e9ecef;
+    border-radius: 25px;
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+    background-color: rgba(255,255,255,0.9);
+}
 
-        .form-control-custom:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(77, 208, 225, 0.25);
-            background-color: white;
-        }
+.form-control-custom:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(77, 208, 225, 0.25);
+    background-color: white;
+}
 
-        .btn-search {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.3);
-        }
+.btn-search {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(77, 208, 225, 0.3);
+}
 
-        .btn-search:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(77, 208, 225, 0.4);
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--tertiary-color) 100%);
-        }
+.btn-search:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(77, 208, 225, 0.4);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--tertiary-color) 100%);
+}
 
-        .btn-search:active {
-            transform: translateY(-1px);
-        }
+.btn-search:active {
+    transform: translateY(-1px);
+}
 
-        .results-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border-radius: 20px;
-        }
+.results-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
 
-        .result-item {
-            background: linear-gradient(135deg, #f0fdff 0%, #e8f9fa 100%);
-            border: 2px solid var(--primary-color);
-            border-radius: 15px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+.result-item {
+    background: linear-gradient(135deg, #f0fdff 0%, #e8f9fa 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-        .result-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s ease;
-        }
+.result-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+}
 
-        .result-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
-            border-color: var(--secondary-color);
-        }
+.result-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
+    border-color: var(--secondary-color);
+}
 
-        .result-item:hover::before {
-            left: 100%;
-        }
+.result-item:hover::before {
+    left: 100%;
+}
 
-        .result-item.selected {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            transform: scale(0.98);
-        }
+.result-item.selected {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    transform: scale(0.98);
+}
 
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #e8f5ff, #f0e8ff, #e8f5ff, #f0e8ff);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(45deg, #e8f5ff, #f0e8ff, #e8f5ff, #f0e8ff);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .toast-custom {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border: none;
-            color: white;
-        }
+.toast-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    color: white;
+}
 
-        .loading-spinner {
-            display: none;
-        }
+.loading-spinner {
+    display: none;
+}
 
-        .icon-custom {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-            margin-right: 10px;
-        }
+.icon-custom {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-right: 10px;
+}

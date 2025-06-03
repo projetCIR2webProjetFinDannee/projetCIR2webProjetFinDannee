@@ -11,6 +11,24 @@
     <!-- CSS commun -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
+        .footer-custom {
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="animated-bg"></div>
