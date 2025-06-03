@@ -106,15 +106,6 @@
                     </div>
                     <div class="card-body p-4">
                         <div id="resultsContainer">
-                            <div class="result-item mb-3" onclick="selectResult(this)">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-file-earmark-text me-3 text-primary"></i>
-                                    <div>
-                                        <strong>Installation #1</strong><br>
-                                        <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,14 +114,14 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-custom py-4">
+    <footer class="footer-custom py-4 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex flex-wrap justify-content-center gap-4 mb-3">
                         <p>
                             Mathis CHARTIER / Mathieu GICQUEL--BOURDEAU / Alexis ROCHON--SANZ
-                        <p>
+                        </p>
                     </div>
                     <div class="text-center">
                         <small>CIR2 2024/2025</small>
@@ -139,6 +130,19 @@
             </div>
         </div>
     </footer>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .footer-custom {
+            margin-top: auto;
+        }
+    </style>
 
     <!-- Toast Container -->
     <div class="toast-container position-fixed top-0 end-0 p-3">
