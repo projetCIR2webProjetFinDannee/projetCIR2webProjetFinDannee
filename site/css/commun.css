@@ -1,49 +1,50 @@
 :root {
-            --primary-color: #28C1B9;
-            --secondary-color: #26c6da;
-            --tertiary-color: #00acc1;
-        }
+    /* Définition des couleurs principales utilisées dans le site */
+    --primary-color: #28C1B9;
+    --secondary-color: #26c6da;
+    --tertiary-color: #00acc1;
+}
 
-        .navbar-custom {
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+.navbar-custom {
+    /* Barre de navigation avec un dégradé et une ombre portée */
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+.navbar-brand {
+    /* Style du nom/logo de la barre de navigation */
+    font-weight: bold;
+    font-size: 1.2rem;
+}
 
-        .navbar-nav .nav-link {
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-            margin: 0 5px;
-        }
+.navbar-nav .nav-link {
+    /* Style des liens de navigation */
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin: 0 5px;
+}
 
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
+.navbar-nav .nav-link:hover {
+    /* Effet au survol des liens de navigation */
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
+    color: white;
+    margin-top: 50px;
+}
 
+.footer-custom a {
+    /* Style des liens dans le pied de page */
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
 
-        .footer-custom {
-            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
-            color: white;
-            margin-top: 50px;
-        }
-
-        .footer-custom a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-        }
-
-        .footer-custom a:hover {
-            color: white;
-            text-decoration: underline;
-        }
+.footer-custom a:hover {
+    /* Effet au survol des liens du pied de page */
+    color: white;
+    text-decoration: underline;
+}
