@@ -112,62 +112,65 @@ function showDetailPage(installationId) {
                 1: {
                     id: "INST-2024-001",
                     date: "15/03/2024",
-                    adresse: "123 Rue de la République, 29000 Quimper",
+                    longitude: -4.0962,
+                    latitude: 48.0000,
+                    adresse: "29000 Quimper",
                     surface: "45 m²",
                     puissance: "5.2 kW",
                     nbPanneaux: 12,
+                    nbOndulateurs: 1,
                     marqueOnduleur: "SMA",
                     modeleOnduleur: "Sunny Boy 5.0",
                     marquePanneaux: "SunPower",
                     modelePanneaux: "SPR-X22-370",
-                    puissancePanneau: "370 Wc",
                     orientation: "Sud",
                     inclinaison: "30°",
                     installateur: "Solar Tech Bretagne",
-                    coutTotal: "12 500 €",
-                    productionAnnuelle: "5 200 kWh/an",
-                    economieAnnuelle: "780 €/an",
-                    co2Evite: "2.1 tonnes/an"
+                    productionAnnuelle: "calculable",
+                    economieAnnuelle: "calculable",
+                    co2Evite: "claculable"
                 },
                 2: {
                     id: "INST-2024-002", 
                     date: "22/02/2024",
-                    adresse: "45 Avenue des Chênes, 35000 Rennes",
+                    longitude: -1.6750,
+                    latitude: 48.1173,
+                    adresse: "35000 Rennes",
                     surface: "32 m²",
                     puissance: "3.8 kW",
                     nbPanneaux: 8,
+                    nbOndulateurs: 1,
                     marqueOnduleur: "Fronius",
                     modeleOnduleur: "Primo 4.0-1",
                     marquePanneaux: "LG",
                     modelePanneaux: "LG475N2W-A6",
-                    puissancePanneau: "475 Wc",
                     orientation: "Sud-Est",
                     inclinaison: "35°",
                     installateur: "Eco Solar 35",
-                    coutTotal: "9 800 €",
-                    productionAnnuelle: "3 900 kWh/an",
-                    economieAnnuelle: "585 €/an",
-                    co2Evite: "1.6 tonnes/an"
+                    productionAnnuelle: "calculable",
+                    economieAnnuelle: "calculable",
+                    co2Evite: "claculable"
                 },
                 3: {
                     id: "INST-2024-003",
                     date: "08/01/2024", 
-                    adresse: "78 Chemin du Littoral, 56100 Lorient",
+                    longitude: -3.3662,
+                    latitude: 47.7500,
+                    adresse: "56100 Lorient",
                     surface: "56 m²",
                     puissance: "6.4 kW",
                     nbPanneaux: 16,
+                    nbOndulateurs: 1,
                     marqueOnduleur: "Huawei",
                     modeleOnduleur: "SUN2000-6KTL-M1",
                     marquePanneaux: "Jinko",
                     modelePanneaux: "JKM400M-54HL4-V",
-                    puissancePanneau: "400 Wc",
                     orientation: "Sud-Ouest",
                     inclinaison: "28°",
                     installateur: "Morbihan Energie Verte",
-                    coutTotal: "15 200 €",
-                    productionAnnuelle: "6 800 kWh/an",
-                    economieAnnuelle: "1 020 €/an",
-                    co2Evite: "2.7 tonnes/an"
+                    productionAnnuelle: "calculable",
+                    economieAnnuelle: "calculable",
+                    co2Evite: "claculable"
                 }
             };
 
@@ -201,13 +204,14 @@ function showDetailPage(installationId) {
                                     <div class="row mb-4">
                                         <div class="col-md-6">
                                             <h5><i class="bi bi-geo-alt icon-custom"></i>Localisation</h5>
-                                            <p class="mb-3">${data.adresse}</p>
+                                            <p class="mb-3">${data.latitude}  ${data.longitude} ,${data.adresse}</p>
                                             
                                             <h5><i class="bi bi-rulers icon-custom"></i>Caractéristiques</h5>
                                             <ul class="list-unstyled">
                                                 <li><strong>Surface:</strong> ${data.surface}</li>
                                                 <li><strong>Puissance totale:</strong> ${data.puissance}</li>
                                                 <li><strong>Nombre de panneaux:</strong> ${data.nbPanneaux}</li>
+                                                <li><strong>Nombre d'ondulateurs:</strong> ${data.nbOndulateurs}</li>
                                                 <li><strong>Orientation:</strong> ${data.orientation}</li>
                                                 <li><strong>Inclinaison:</strong> ${data.inclinaison}</li>
                                             </ul>
@@ -223,7 +227,6 @@ function showDetailPage(installationId) {
                                                 <h6>Panneaux photovoltaïques</h6>
                                                 <p class="mb-1"><strong>Marque:</strong> ${data.marquePanneaux}</p>
                                                 <p class="mb-1"><strong>Modèle:</strong> ${data.modelePanneaux}</p>
-                                                <p class="mb-0"><strong>Puissance unitaire:</strong> ${data.puissancePanneau}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -259,10 +262,6 @@ function showDetailPage(installationId) {
                                             <h5><i class="bi bi-building icon-custom"></i>Installateur</h5>
                                             <p class="mb-3">${data.installateur}</p>
                                         </div>
-                                        <div class="col-md-6">
-                                            <h5><i class="bi bi-cash-stack icon-custom"></i>Investissement</h5>
-                                            <p class="mb-3 fs-5 text-primary fw-bold">${data.coutTotal}</p>
-                                        </div>
                                     </div>
 
                                 </div>
@@ -272,12 +271,6 @@ function showDetailPage(installationId) {
                             <div class="text-center">
                                 <button class="btn btn-primary me-3">
                                     <i class="bi bi-download me-2"></i>Télécharger le rapport PDF
-                                </button>
-                                <button class="btn btn-outline-primary me-3">
-                                    <i class="bi bi-share me-2"></i>Partager cette installation
-                                </button>
-                                <button class="btn btn-outline-secondary">
-                                    <i class="bi bi-telephone me-2"></i>Contacter l'installateur
                                 </button>
                             </div>
                         </div>
