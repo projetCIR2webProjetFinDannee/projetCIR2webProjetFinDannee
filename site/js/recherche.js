@@ -70,11 +70,11 @@ function updateResults(onduleur, panneaux, departement) {
         resultItem.style.transform = 'translateY(20px)';
         
         resultItem.innerHTML = `
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center"<a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${index + 1})"></a>>
                 <i class="bi ${data.icon} me-3 text-primary fs-4"></i>
                 <div class="flex-grow-1">
                     <strong>${data.title}</strong><br>
-                    <small class="text-muted">${data.details} + <a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${index + 1})">lien détaillé</a></small>
+                    <small class="text-muted">${data.details}</small>
                 </div>
                 <i class="bi bi-chevron-right text-muted"></i>
             </div>
