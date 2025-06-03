@@ -1,19 +1,16 @@
 :root {
-    /* Définition des couleurs principales utilisées comme variables CSS */
     --primary-color: #28C1B9;
     --secondary-color: #26c6da;
     --tertiary-color: #00acc1;
 }
 
 body {
-    /* Style général du fond de page et police */
     background: linear-gradient(135deg, #e8f5ff 0%, #f0e8ff 100%);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .search-card {
-    /* Carte de recherche avec effet de flou et ombre portée */
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
     border: none;
@@ -23,13 +20,11 @@ body {
 }
 
 .search-card:hover {
-    /* Effet de survol : élévation et ombre accentuée */
     transform: translateY(-5px);
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
 }
 
 .form-control-custom {
-    /* Style personnalisé pour les champs de formulaire */
     border: 2px solid #e9ecef;
     border-radius: 25px;
     padding: 12px 20px;
@@ -38,14 +33,12 @@ body {
 }
 
 .form-control-custom:focus {
-    /* Effet focus sur le champ : couleur de bordure et ombre */
     border-color: var(--primary-color);
     box-shadow: 0 0 0 0.2rem rgba(77, 208, 225, 0.25);
     background-color: white;
 }
 
 .btn-search {
-    /* Bouton de recherche avec dégradé et ombre */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border: none;
     border-radius: 25px;
@@ -58,19 +51,16 @@ body {
 }
 
 .btn-search:hover {
-    /* Effet de survol sur le bouton : translation, ombre et changement de dégradé */
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(77, 208, 225, 0.4);
     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--tertiary-color) 100%);
 }
 
 .btn-search:active {
-    /* Effet lors du clic sur le bouton */
     transform: translateY(-1px);
 }
 
 .results-card {
-    /* Carte contenant les résultats, similaire à search-card */
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
     border: none;
@@ -79,7 +69,6 @@ body {
 }
 
 .result-item {
-    /* Style de chaque résultat individuel */
     background: linear-gradient(135deg, #f0fdff 0%, #e8f9fa 100%);
     border: 2px solid var(--primary-color);
     border-radius: 15px;
@@ -91,7 +80,6 @@ body {
 }
 
 .result-item::before {
-    /* Effet de survol lumineux sur les résultats */
     content: '';
     position: absolute;
     top: 0;
@@ -103,26 +91,22 @@ body {
 }
 
 .result-item:hover {
-    /* Survol : élévation, ombre et changement de bordure */
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3);
     border-color: var(--secondary-color);
 }
 
 .result-item:hover::before {
-    /* Animation de l'effet lumineux lors du survol */
     left: 100%;
 }
 
 .result-item.selected {
-    /* Style pour un résultat sélectionné */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: white;
     transform: scale(0.98);
 }
 
 .animated-bg {
-    /* Fond animé couvrant toute la page, placé derrière le contenu */
     position: fixed;
     top: 0;
     left: 0;
@@ -135,14 +119,12 @@ body {
 }
 
 @keyframes gradientShift {
-    /* Animation du fond dégradé */
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
 .fade-in {
-    /* Animation d’apparition douce */
     animation: fadeIn 0.6s ease-out;
 }
 
@@ -158,19 +140,16 @@ body {
 }
 
 .toast-custom {
-    /* Style personnalisé pour les notifications/toasts */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border: none;
     color: white;
 }
 
 .loading-spinner {
-    /* Masque le spinner de chargement par défaut */
     display: none;
 }
 
 .icon-custom {
-    /* Style pour les icônes */
     color: var(--primary-color);
     font-size: 1.2rem;
     margin-right: 10px;
