@@ -98,20 +98,6 @@
         </div>
     </footer>
 
-    <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="liveToast" class="toast toast-custom" role="alert">
-            <div class="toast-header bg-transparent border-0 text-white">
-                <i class="bi bi-info-circle me-2"></i>
-                <strong class="me-auto">Information</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
-            </div>
-            <div class="toast-body" id="toastMessage">
-                Message par défaut
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

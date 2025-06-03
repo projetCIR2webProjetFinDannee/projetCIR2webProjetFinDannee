@@ -105,15 +105,6 @@
                     </div>
                     <div class="card-body p-4">
                         <div id="resultsContainer">
-                            <div class="result-item mb-3" onclick="selectResult(this)">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-file-earmark-text me-3 text-primary"></i>
-                                    <div>
-                                        <strong>Installation #1</strong><br>
-                                        <small class="text-muted">date/nb/surface/puissance/localisation + lien</small>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +113,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-custom py-4">
+    <footer class="footer-custom py-4 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-12">
