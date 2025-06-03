@@ -98,6 +98,7 @@
                     </div>
                     <div class="text-center">
                         <small>CIR2 2024/2025</small>
+                        <small>GROUPE 9</small>
                     </div>
                 </div>
             </div>
