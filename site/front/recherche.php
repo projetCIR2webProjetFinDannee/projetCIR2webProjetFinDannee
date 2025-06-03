@@ -29,17 +29,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showToast('Accueil')">
+                        <a class="nav-link" href="accueil.php">
                             <i class="bi bi-house"></i> Accueil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#" onclick="showToast('Recherche')">
+                        <a class="nav-link active" href="recherche.php">
                             <i class="bi bi-search"></i> Recherche
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showToast('Carte')">
+                        <a class="nav-link" href="carte.php">
                             <i class="bi bi-map"></i> Carte
                         </a>
                     </li>
