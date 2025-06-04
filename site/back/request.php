@@ -43,7 +43,8 @@ if ($method == 'GET') {
         }
         else if ($_GET['type'] == 'search') {
             if (isset($_GET['marqueOndulateur']) && isset($_GET['marquePanneaux']) && isset($_GET['numDepartement'])) {
-                $ids = db_getAllDocuIds($conn, $_GET['marqueOndulateur'], $_GET['marquePanneaux'],$_GET['numDepartement']);
+                $page = $_GET['page'] ?? 1;
+                $ids = db_getAllDocuIds($conn, $_GET['marqueOndulateur'], $_GET['marquePanneaux'],$_GET['numDepartement'], $page);
                 echo json_encode($ids);
                 exit;
             }
