@@ -42,262 +42,198 @@ function performSearch() {
 
 function updateResults(onduleur, panneaux, departement) {
     const container = document.getElementById('resultsContainer');
-    const mockData = [
-        {
-            title: `Installation ${onduleur || 'SMA'} - ${panneaux || 'SunPower'}`,
-            details: `15/03/2024 - 12 panneaux ${panneaux || 'SunPower'} - 45m² - 5.2kW - ${departement || '29'} Finistère`,
-            icon: 'bi-lightning-charge'
-        },
-        {
-            title: `Installation ${onduleur || 'Fronius'} - ${panneaux || 'LG'}`,
-            details: `22/02/2024 - 8 panneaux ${panneaux || 'LG'} - 32m² - 3.8kW - ${departement || '35'} Ille-et-Vilaine`,
-            icon: 'bi-sun'
-        },
-        {
-            title: `Installation ${onduleur || 'Huawei'} - ${panneaux || 'Jinko'}`,
-            details: `08/01/2024 - 16 panneaux ${panneaux || 'Jinko'} - 56m² - 6.4kW - ${departement || '56'} Morbihan`,
-            icon: 'bi-battery-charging'
-        }
-    ];
+    // Utilise un fichier request côté serveur pour interroger la base de données (méthode GET)
+    const params = new URLSearchParams({
+        marqueOnduleur: onduleur,
+        marquePanneaux: panneaux,
+        numDepartement: departement
+    }).toString();
 
-    container.innerHTML = '';
-    
-    mockData.forEach((data, index) => {
-        const resultItem = document.createElement('div');
-        resultItem.className = 'result-item mb-3';
-        resultItem.onclick = () => selectResult(resultItem);
-        resultItem.style.opacity = '0';
-        resultItem.style.transform = 'translateY(20px)';
+    fetch(`../back/search?request.php${params}`)
+        .then(response => response.json())
+        .then(dataList => {
+            container.innerHTML = '';
+
+            if (!Array.isArray(dataList) || dataList.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">Aucun résultat trouvé.</div>';
+                return;
+            }
+
+            dataList.forEach((data, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item mb-3';
+                resultItem.onclick = () => selectResult(resultItem);
+                resultItem.style.opacity = '0';
+                resultItem.style.transform = 'translateY(20px)';
+
+                resultItem.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${data.id})"></a>
+                        <i class="bi ${data.icon || 'bi-lightning-charge'} me-3 text-primary fs-4"></i>
+                        <div class="flex-grow-1">
+                            <strong>${data.title || data.id}</strong><br>
+                            <small class="text-muted">${data.details || ''}</small>
+                        </div>
+                        <i class="bi bi-chevron-right text-muted"></i>
+                    </div>
+                `;
+
+                container.appendChild(resultItem);
+
+                // Animate appearance
+                setTimeout(() => {
+                    resultItem.style.transition = 'all 0.5s ease';
+                    resultItem.style.opacity = '1';
+                    resultItem.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        })
+        .catch(error => {
+            container.innerHTML = '<div class="alert alert-danger">Erreur lors de la récupération des résultats.</div>';
+            console.error(error);
+        });
+    }
+
+    function selectResult(element) {
+        // Remove previous selection
+        document.querySelectorAll('.result-item').forEach(item => {
+            item.classList.remove('selected');
+        });
         
-        resultItem.innerHTML = `
-            <div class="d-flex align-items-center"<a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${index + 1})"></a>>
-                <i class="bi ${data.icon} me-3 text-primary fs-4"></i>
-                <div class="flex-grow-1">
-                    <strong>${data.title}</strong><br>
-                    <small class="text-muted">${data.details}</small>
-                </div>
-                <i class="bi bi-chevron-right text-muted"></i>
-            </div>
-        `;
+        // Add selection
+        element.classList.add('selected');
         
-        container.appendChild(resultItem);
-        
-        // Animate appearance
         setTimeout(() => {
-            resultItem.style.transition = 'all 0.5s ease';
-            resultItem.style.opacity = '1';
-            resultItem.style.transform = 'translateY(0)';
-        }, index * 200);
-    });
-}
+            element.classList.remove('selected');
+            const title = element.querySelector('strong').textContent;
+        }, 800);
+    }
 
-function selectResult(element) {
-    // Remove previous selection
-    document.querySelectorAll('.result-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    
-    // Add selection
-    element.classList.add('selected');
-    
-    setTimeout(() => {
-        element.classList.remove('selected');
-        const title = element.querySelector('strong').textContent;
-    }, 800);
-}
+async function showDetailPage(installationId) {
+    // Masquer le contenu principal
+    document.querySelector('.container.my-5').style.display = 'none';
+    document.querySelector('.footer-custom').style.display = 'none';
 
-function showDetailPage(installationId) {
-            // Simulation de données détaillées d'installation
-            const detailData = {
-                1: {
-                    id: "INST-2024-001",
-                    date: "15/03/2024",
-                    longitude: -4.0962,
-                    latitude: 48.0000,
-                    adresse: "29000 Quimper",
-                    surface: "45 m²",
-                    puissance: "5.2 kW",
-                    nbPanneaux: 12,
-                    nbOndulateurs: 1,
-                    marqueOnduleur: "SMA",
-                    modeleOnduleur: "Sunny Boy 5.0",
-                    marquePanneaux: "SunPower",
-                    modelePanneaux: "SPR-X22-370",
-                    orientation: "Sud",
-                    inclinaison: "30°",
-                    installateur: "Solar Tech Bretagne",
-                    productionAnnuelle: "calculable",
-                    economieAnnuelle: "calculable",
-                    co2Evite: "claculable"
-                },
-                2: {
-                    id: "INST-2024-002", 
-                    date: "22/02/2024",
-                    longitude: -1.6750,
-                    latitude: 48.1173,
-                    adresse: "35000 Rennes",
-                    surface: "32 m²",
-                    puissance: "3.8 kW",
-                    nbPanneaux: 8,
-                    nbOndulateurs: 1,
-                    marqueOnduleur: "Fronius",
-                    modeleOnduleur: "Primo 4.0-1",
-                    marquePanneaux: "LG",
-                    modelePanneaux: "LG475N2W-A6",
-                    orientation: "Sud-Est",
-                    inclinaison: "35°",
-                    installateur: "Eco Solar 35",
-                    productionAnnuelle: "calculable",
-                    economieAnnuelle: "calculable",
-                    co2Evite: "claculable"
-                },
-                3: {
-                    id: "INST-2024-003",
-                    date: "08/01/2024", 
-                    longitude: -3.3662,
-                    latitude: 47.7500,
-                    adresse: "56100 Lorient",
-                    surface: "56 m²",
-                    puissance: "6.4 kW",
-                    nbPanneaux: 16,
-                    nbOndulateurs: 1,
-                    marqueOnduleur: "Huawei",
-                    modeleOnduleur: "SUN2000-6KTL-M1",
-                    marquePanneaux: "Jinko",
-                    modelePanneaux: "JKM400M-54HL4-V",
-                    orientation: "Sud-Ouest",
-                    inclinaison: "28°",
-                    installateur: "Morbihan Energie Verte",
-                    productionAnnuelle: "calculable",
-                    economieAnnuelle: "calculable",
-                    co2Evite: "claculable"
-                }
-            };
+    // Supprimer une éventuelle page de détail précédente
+    const oldDetail = document.getElementById('detailPage');
+    if (oldDetail) oldDetail.remove();
 
-            const data = detailData[installationId];
-            if (!data) return;
+    try {
+        // Récupérer les données détaillées depuis le serveur
+        const response = await fetch(`../back/detail?request.php&id=${installationId}`);
+        if (!response.ok) throw new Error('Erreur lors de la récupération des détails');
+        const data = await response.json();
+        if (!data || !data.id) throw new Error('Données non trouvées');
 
-            // Créer la page de détail
-            const detailHTML = `
-                <div class="container my-5">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-10">
-                            <!-- Header avec bouton retour -->
-                            <div class="d-flex align-items-center mb-4">
-                                <button class="tn btn-primary btn-search btn-lg" onclick="hideDetailPage()">
-                                    <i class="bi bi-arrow-left me-2"></i>
-                                    <small>
-                                    Retour à la recherche
-                                    </small>
-                                </button>
-                                <h2 class="mb-0">
-                                    Détail de l'installation
-                                </h2>
+        // Stocker pour le PDF
+        detailData[installationId] = data;
+
+        // Générer le HTML de la page de détail
+        const detailHTML = `
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="d-flex align-items-center mb-4">
+                            <button class="tn btn-primary btn-search btn-lg" onclick="hideDetailPage()">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                <small>Retour à la recherche</small>
+                            </button>
+                            <h2 class="mb-0">Détail de l'installation</h2>
+                        </div>
+                        <div class="card search-card mb-4">
+                            <div class="card-header bg-transparent border-0 pt-4">
+                                <h4 class="text-center mb-0">Installation ${data.id}</h4>
+                                <p class="text-center text-muted mb-0">Installée le ${data.date}</p>
                             </div>
-
-                            <!-- Carte principale d'information -->
-                            <div class="card search-card mb-4">
-                                <div class="card-header bg-transparent border-0 pt-4">
-                                    <h4 class="text-center mb-0">Installation ${data.id}</h4>
-                                    <p class="text-center text-muted mb-0">Installée le ${data.date}</p>
+                            <div class="card-body p-4">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h5><i class="bi bi-geo-alt icon-custom"></i>Localisation</h5>
+                                        <p class="mb-3">${data.latitude}  ${data.longitude} ,${data.adresse}</p>
+                                        <h5><i class="bi bi-rulers icon-custom"></i>Caractéristiques</h5>
+                                        <ul class="list-unstyled">
+                                            <li><strong>Surface:</strong> ${data.surface}</li>
+                                            <li><strong>Puissance totale:</strong> ${data.puissance}</li>
+                                            <li><strong>Nombre de panneaux:</strong> ${data.nbPanneaux}</li>
+                                            <li><strong>Nombre d'ondulateurs:</strong> ${data.nbOndulateurs}</li>
+                                            <li><strong>Orientation:</strong> ${data.orientation}</li>
+                                            <li><strong>Inclinaison:</strong> ${data.inclinaison}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5><i class="bi bi-cpu icon-custom"></i>Équipements</h5>
+                                        <div class="bg-light p-3 rounded mb-3">
+                                            <h6>Onduleur</h6>
+                                            <p class="mb-1"><strong>Marque:</strong> ${data.marqueOnduleur}</p>
+                                            <p class="mb-0"><strong>Modèle:</strong> ${data.modeleOnduleur}</p>
+                                        </div>
+                                        <div class="bg-light p-3 rounded">
+                                            <h6>Panneaux photovoltaïques</h6>
+                                            <p class="mb-1"><strong>Marque:</strong> ${data.marquePanneaux}</p>
+                                            <p class="mb-1"><strong>Modèle:</strong> ${data.modelePanneaux}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body p-4">
-                                    
-                                    <!-- Informations générales -->
-                                    <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <h5><i class="bi bi-geo-alt icon-custom"></i>Localisation</h5>
-                                            <p class="mb-3">${data.latitude}  ${data.longitude} ,${data.adresse}</p>
-                                            
-                                            <h5><i class="bi bi-rulers icon-custom"></i>Caractéristiques</h5>
-                                            <ul class="list-unstyled">
-                                                <li><strong>Surface:</strong> ${data.surface}</li>
-                                                <li><strong>Puissance totale:</strong> ${data.puissance}</li>
-                                                <li><strong>Nombre de panneaux:</strong> ${data.nbPanneaux}</li>
-                                                <li><strong>Nombre d'ondulateurs:</strong> ${data.nbOndulateurs}</li>
-                                                <li><strong>Orientation:</strong> ${data.orientation}</li>
-                                                <li><strong>Inclinaison:</strong> ${data.inclinaison}</li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h5><i class="bi bi-cpu icon-custom"></i>Équipements</h5>
-                                            <div class="bg-light p-3 rounded mb-3">
-                                                <h6>Onduleur</h6>
-                                                <p class="mb-1"><strong>Marque:</strong> ${data.marqueOnduleur}</p>
-                                                <p class="mb-0"><strong>Modèle:</strong> ${data.modeleOnduleur}</p>
-                                            </div>
-                                            <div class="bg-light p-3 rounded">
-                                                <h6>Panneaux photovoltaïques</h6>
-                                                <p class="mb-1"><strong>Marque:</strong> ${data.marquePanneaux}</p>
-                                                <p class="mb-1"><strong>Modèle:</strong> ${data.modelePanneaux}</p>
-                                            </div>
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <div class="text-center p-3 border rounded bg-success bg-opacity-10">
+                                            <i class="bi bi-lightning-charge fs-1 text-success"></i>
+                                            <h5 class="text-success">${data.productionAnnuelle}</h5>
+                                            <p class="mb-0">Production annuelle estimée</p>
                                         </div>
                                     </div>
-
-                                    <!-- Performances et économies -->
-                                    <div class="row mb-4">
-                                        <div class="col-md-4">
-                                            <div class="text-center p-3 border rounded bg-success bg-opacity-10">
-                                                <i class="bi bi-lightning-charge fs-1 text-success"></i>
-                                                <h5 class="text-success">${data.productionAnnuelle}</h5>
-                                                <p class="mb-0">Production annuelle estimée</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="text-center p-3 border rounded bg-warning bg-opacity-10">
-                                                <i class="bi bi-currency-euro fs-1 text-warning"></i>
-                                                <h5 class="text-warning">${data.economieAnnuelle}</h5>
-                                                <p class="mb-0">Économies annuelles</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="text-center p-3 border rounded bg-info bg-opacity-10">
-                                                <i class="bi bi-tree fs-1 text-info"></i>
-                                                <h5 class="text-info">${data.co2Evite}</h5>
-                                                <p class="mb-0">CO₂ évité par an</p>
-                                            </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center p-3 border rounded bg-warning bg-opacity-10">
+                                            <i class="bi bi-currency-euro fs-1 text-warning"></i>
+                                            <h5 class="text-warning">${data.economieAnnuelle}</h5>
+                                            <p class="mb-0">Économies annuelles</p>
                                         </div>
                                     </div>
-
-                                    <!-- Informations commerciales -->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h5><i class="bi bi-building icon-custom"></i>Installateur</h5>
-                                            <p class="mb-3">${data.installateur}</p>
+                                    <div class="col-md-4">
+                                        <div class="text-center p-3 border rounded bg-info bg-opacity-10">
+                                            <i class="bi bi-tree fs-1 text-info"></i>
+                                            <h5 class="text-info">${data.co2Evite}</h5>
+                                            <p class="mb-0">CO₂ évité par an</p>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5><i class="bi bi-building icon-custom"></i>Installateur</h5>
+                                        <p class="mb-3">${data.installateur}</p>
+                                    </div>
                                 </div>
                             </div>
-
-                            <!-- Actions -->
-                            <div class="text-center">
-                                <button class="btn btn-primary me-3" onclick="generatePDF(detailData[${installationId}])">
-                                    <i class="bi bi-download me-2"></i>Télécharger le rapport PDF
-                                </button>
-                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary me-3" onclick="generatePDF(detailData[${installationId}])">
+                                <i class="bi bi-download me-2"></i>Télécharger le rapport PDF
+                            </button>
                         </div>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
 
-            // Masquer le contenu principal et afficher les détails
-            document.querySelector('.container.my-5').style.display = 'none';
-            document.querySelector('.footer-custom').style.display = 'none';
-            document.body.insertAdjacentHTML('beforeend', `<div id="detailPage">${detailHTML}</div>`);
-            
-            // Scroll vers le haut
-            window.scrollTo(0, 0);
-        }
+        // Afficher la page de détail
+        document.body.insertAdjacentHTML('beforeend', `<div id="detailPage">${detailHTML}</div>`);
+        window.scrollTo(0, 0);
+    } catch (error) {
+        alert("Impossible de charger les détails de l'installation.");
+        document.querySelector('.container.my-5').style.display = 'block';
+        document.querySelector('.footer-custom').style.display = 'block';
+        console.error(error);
+    }
+}
 
-        function hideDetailPage() {
-            const detailPage = document.getElementById('detailPage');
-            if (detailPage) {
-                detailPage.remove();
-            }
-            document.querySelector('.container.my-5').style.display = 'block';
-            document.querySelector('.footer-custom').style.display = 'block';
-        }
+function hideDetailPage() {
+    const detailPage = document.getElementById('detailPage');
+    if (detailPage) {
+        detailPage.remove();
+    }
+    document.querySelector('.container.my-5').style.display = 'block';
+    document.querySelector('.footer-custom').style.display = 'block';
+}
 
 // Add smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
