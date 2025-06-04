@@ -358,6 +358,12 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     $stmt->bindParam(':id_inst', $installer_id);
     $stmt->execute();
 
+    // Add installation
+    $iddoc = $conn->lastInsertId();
+    $stmt = $conn->prepare('INSERT INTO Installation (iddoc) VALUES (:iddoc);');
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
+
     return true;
 }
 
