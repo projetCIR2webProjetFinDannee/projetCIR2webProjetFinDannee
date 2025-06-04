@@ -81,21 +81,25 @@
                                     <select class="form-select form-control-custom" id="departement">
                                         <option value="">Sélectionner un département</option>
                                         <!-- Liste des départements -->
-                                        <option value="01">01 - Ain</option>
-                                        <option value="02">02 - Aisne</option>
-                                        <option value="13">13 - Bouches-du-Rhône</option>
-                                        <option value="29">29 - Finistère</option>
-                                        <option value="30">30 - Gard</option>
-                                        <option value="33">33 - Gironde</option>
-                                        <option value="34">34 - Hérault</option>
-                                        <option value="44">44 - Loire-Atlantique</option>
-                                        <option value="59">59 - Nord</option>
-                                        <option value="69">69 - Rhône</option>
-                                        <option value="75">75 - Paris</option>
-                                        <option value="76">76 - Seine-Maritime</option>
-                                        <option value="83">83 - Var</option>
-                                        <option value="84">84 - Vaucluse</option>
-                                        <option value="85">85 - Vendée</option>
+                                         
+                                        <option value="84">🏔️ Auvergne-Rhône-Alpes</option>
+                                        <option value="27">🍷 Bourgogne-Franche-Comté</option>
+                                        <option value="53">🌊 Bretagne</option>
+                                        <option value="24">🏰 Centre-Val de Loire</option>
+                                        <option value="94">🏝️ Corse</option>
+                                        <option value="44">🍺 Grand Est</option>
+                                        <option value="32">⚒️ Hauts-de-France</option>
+                                        <option value="11">🗼 Île-de-France</option>
+                                        <option value="28">🧀 Normandie</option>
+                                        <option value="75">🍷 Nouvelle-Aquitaine</option>
+                                        <option value="76">☀️ Occitanie</option>
+                                        <option value="52">🏰 Pays de la Loire</option>
+                                        <option value="93">🌴 Provence-Alpes-Côte d'Azur</option>
+                                        <option value="1">🏖️ Guadeloupe</option>
+                                        <option value="2">🌺 Martinique</option>
+                                        <option value="3">🌿 Guyane</option>
+                                        <option value="4">🌋 La Réunion</option>
+                                        <option value="6">🏝️ Mayotte</option>
                                     </select>
                                 </div>
                                 <!-- Sélection de l'année d'installation -->
@@ -106,21 +110,21 @@
                                     <select class="form-select form-control-custom" id="annee">
                                         <option value="">Sélectionner une année</option>
                                         <!-- Liste des années -->
-                                         <option value="2000">2000</option>
-                                         <option value="2001">2001</option>
-                                         <option value="2002">2002</option>
-                                         <option value="2003">2003</option>
-                                         <option value="2004">2004</option>
-                                         <option value="2005">2005</option>
-                                         <option value="2006">2006</option>
-                                         <option value="2007">2007</option>
-                                         <option value="2008">2008</option>
-                                         <option value="2009">2009</option>
-                                         <option value="2010">2010</option>
-                                         <option value="2011">2011</option>
-                                         <option value="2012">2012</option>
-                                         <option value="2013">2013</option>
-                                         <option value="2014">2014</option>
+                                        <option value="2000">2000</option>
+                                        <option value="2001">2001</option>
+                                        <option value="2002">2002</option>
+                                        <option value="2003">2003</option>
+                                        <option value="2004">2004</option>
+                                        <option value="2005">2005</option>
+                                        <option value="2006">2006</option>
+                                        <option value="2007">2007</option>
+                                        <option value="2008">2008</option>
+                                        <option value="2009">2009</option>
+                                        <option value="2010">2010</option>
+                                        <option value="2011">2011</option>
+                                        <option value="2012">2012</option>
+                                        <option value="2013">2013</option>
+                                        <option value="2014">2014</option>
                                         <option value="2015">2015</option>
                                         <option value="2016">2016</option>
                                         <option value="2017">2017</option>
@@ -131,6 +135,7 @@
                                         <option value="2022">2022</option>
                                         <option value="2023">2023</option>
                                         <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
                                     </select>
                                 </div>
                                 <!-- Bouton de recherche -->
