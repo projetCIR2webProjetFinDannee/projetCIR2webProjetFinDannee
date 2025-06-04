@@ -159,6 +159,6 @@ CREATE TABLE Documentation(
 ------------------------------------------------------------
 
 CREATE TABLE Installation(
-        id               INT PRIMARY KEY,
+        id               SERIAL PRIMARY KEY,
         iddoc INT REFERENCES Documentation(id) NOT NULL
 );
