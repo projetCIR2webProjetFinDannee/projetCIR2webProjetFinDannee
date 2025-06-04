@@ -105,12 +105,22 @@ else if ($method == "POST") {
             $incl_opti, $orient_opti
         );
         if ($result) {
-            http_response_code(200);
+            http_response_code(201);
         }
         else {
             requestError();
         }
         exit;
+    }
+    else {
+        requestError();
+    }
+}
+
+else if ($method == 'DELETE') {
+    if (isset($_GET['id'])) {
+        db_deleteDoc($conn, $_GET['id']);
+        http_response_code(200);
     }
     else {
         requestError();

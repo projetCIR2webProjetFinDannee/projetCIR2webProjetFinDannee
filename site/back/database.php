@@ -367,4 +367,14 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     return true;
 }
 
+function db_deleteDoc($conn, $iddoc) {
+    $stmt = $conn->prepare('DELETE FROM Installation WHERE iddoc=:iddoc;');
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
+
+    $stmt = $conn->prepare('DELETE FROM Documentation WHERE iddoc=:iddoc');
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
+}
+
 ?>
