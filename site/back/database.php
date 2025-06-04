@@ -93,17 +93,89 @@ function db_getNbPanelBrand($conn) {
     return $result['count'];
 }
 
-function db_getAllDocuIds($conn, $ondulatorBrand=null, $panelBrand=null, $dep=null) {
+function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep) {
+    $req = "
+        SELECT doc.id
+        FROM Documentation AS doc
+        JOIN Panneau AS p ON doc.id_Panneau=p.id
+        JOIN Panneau_Marque AS p_marque ON p.id_Panneau_Marque=p_marque.id
+        JOIN Ondulateur AS ond ON doc.id_Ondulateur=ond.id
+        JOIN Ondulateur_Marque AS o_marque ON ond.id_Ondulateur_Marque=o_marque.id
+        JOIN Commune AS com ON doc.code_insee=com.code_insee";
 
-}
+    // Add optional parameters, where 'all' means no selection
+    $wherePlaced = false;
+    // Ondulator brand
+    if ($ondulatorBrand != 'all') {     
+        $req .= " WHERE o_marque.nom LIKE :ond_brand";
+        $wherePlaced = true;
+    }
+    // Pannel brand
+    if ($panelBrand != "all") {     
+        if ($wherePlaced) {
+            $req .= " AND";
+        }
+        else {
+            $req .= " WHERE";
+        }
+        $req .= " p_marque.nom LIKE :pan_brand";
+        $wherePlaced = true;
+    }
+    // Departement
+    if ($dep != "all") {
+        if ($wherePlaced) {
+            $req .= " AND";
+        }
+        else {
+            $req .= " WHERE";
+        }
+        $req .= " com.code_dep LIKE :dep";
+        $wherePlaced = true;
+    }
+    // Limit the number of rows
+    $req .= " LIMIT 20 OFFSET 0;";
 
-function db_getDocuShortInfos($conn, $iddoc) {
-    // See updateResults() in js
+    $stmt = $conn->prepare($req);
+
+    if ($ondulatorBrand != 'all') {
+        $searchOndul = "%".$ondulatorBrand."%";
+        $stmt->bindParam(':ond_brand', $searchOndul);
+    }
+    if ($panelBrand != 'all') {
+        $searchPanel = "%".$panelBrand."%";
+        $stmt->bindParam(':pan_brand', $searchPanel);
+    }
+    if ($dep != 'all') {
+        $searchDep = "%".$dep."%";
+        $stmt->bindParam(':dep', $searchDep);
+    }
+
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return array("results" => array_column($result, 'id'));
 }
 
 function db_getDocuInfos($conn, $iddoc) {
-    // All infos
-    // See showDetailPage() in recherche.js
+    $stmt = $conn->prepare('
+        SELECT doc.date, doc.lat AS "latitude", doc.long AS "longitude", doc.nb_panneaux, doc.nb_ondul AS "nb_ondulateurs",
+        doc.surface, doc.puiss_crete AS "puissance_crete", doc.pente, doc.pente_optimum, doc.orientation, doc.orientation_optimum,
+        doc.production_pvgis, p_marque.nom AS "marque_panneau", p_modele.nom AS "modele_panneau", o_marque.nom AS "marque_ondulateur",
+        o_modele.nom AS "modele_ondulateur", inst.nom AS "installeur", com.code_postal, com.nom AS "commune"
+        FROM Documentation AS doc
+        JOIN Panneau AS p ON doc.id_Panneau=p.id
+        JOIN Panneau_Marque AS p_marque ON p.id_Panneau_Marque=p_marque.id
+        JOIN Panneau_Modele AS p_modele ON p.id_Panneau_Modele=p_modele.id
+        JOIN Ondulateur AS ond ON doc.id_Ondulateur=ond.id
+        JOIN Ondulateur_Marque AS o_marque ON ond.id_Ondulateur_Marque=o_marque.id
+        JOIN Ondulateur_Modele AS o_modele ON ond.id_Ondulateur_Modele=o_modele.id
+        JOIN Installeur AS inst ON doc.id_Installeur=inst.id
+        JOIN Commune AS com ON doc.code_insee=com.code_insee
+        WHERE doc.id=:iddoc;');
+
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result;
 }
 
 function db_getAllLocs($conn, $dep=null, $year=null) {

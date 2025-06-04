@@ -4,8 +4,10 @@ ini_set('display_errors', 1);
 
 include_once("database.php");
 
+header('Content-Type: application/json');
+
 function requestError($msg="") {
-    echo "error";
+    http_response_code(400);
     exit;
 }
 
@@ -38,6 +40,35 @@ if ($method == 'GET') {
             else {
                 requestError();
             }
+        }
+        else if ($_GET['type'] == 'search') {
+            if (isset($_GET['marqueOndulateur']) && isset($_GET['marquePanneaux']) && isset($_GET['numDepartement'])) {
+                $ids = db_getAllDocuIds($conn, $_GET['marqueOndulateur'], $_GET['marquePanneaux'],$_GET['numDepartement']);
+                echo json_encode($ids);
+                exit;
+            }
+            else {
+                requestError();
+            }
+        }
+        else if ($_GET['type'] == 'info') {
+            if (isset($_GET['id'])) {
+                $install = db_getDocuInfos($conn, $_GET['id']);
+                if ($install === false) {
+                    http_response_code(400);
+                }
+                else {
+                    http_response_code(200);
+                    echo json_encode($install);
+                }
+                exit;
+            }
+            else {
+                requestError();
+            }
+        }
+        else {
+            requestError();
         }
     }
     else {
