@@ -8,23 +8,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Données simulées des installations photovoltaïques par département et année
-const installationsData = {
-    // Exemple pour le département 13 (Bouches-du-Rhône)
-    '13': {
-        '2020': [
-            // Chaque objet représente une installation
-            { id: 1, nom: 'Installation Marseille Nord', lat: 43.3182, lng: 5.3698, puissance: 2.5, localite: 'Marseille' },
-            // ...
-        ],
-        '2021': [
-            // ...
-        ]
-    },
-    // Autres départements...
-    // 29, 33, 69, 84
-};
-
 // Gestion de la soumission du formulaire de recherche
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Empêche le rechargement de la page
@@ -32,7 +15,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
 });
 
 // Fonction principale de recherche et d'affichage des installations
-function rechercherInstallations() {
+async function rechercherInstallations() {
     // Récupération des valeurs du formulaire
     const departement = document.getElementById('departement').value;
     const annee = document.getElementById('annee').value;
@@ -51,15 +34,20 @@ function rechercherInstallations() {
     document.getElementById('loading').style.display = 'block';
     document.getElementById('stats').style.display = 'none';
 
-    // Simulation d'un délai de chargement (1 seconde)
-    setTimeout(() => {
+    try {
         // Efface les anciens marqueurs de la carte
         markersGroup.clearLayers();
 
-        // Récupère les installations correspondant aux critères
-        const installations = installationsData[departement]?.[annee] || [];
+        // Récupère directement les installations filtrées via l'API
+        const locationsResponse = await fetch(`../back/api.php?type=locations&departement=${departement}&annee=${annee}`);
+        
+        if (!locationsResponse.ok) {
+            throw new Error('Erreur lors de la recherche');
+        }
+        
+        const locationsData = await locationsResponse.json();
+        const installations = locationsData.locations || [];
 
-        // Si aucune installation trouvée, affiche un message et arrête
         if (installations.length === 0) {
             showToast('Aucune installation trouvée pour ces critères');
             document.getElementById('loading').style.display = 'none';
@@ -67,42 +55,70 @@ function rechercherInstallations() {
             return;
         }
 
-        // Calcule les statistiques : nombre, puissance totale et moyenne
-        const nbInstallations = installations.length;
-        const puissanceTotale = installations.reduce((sum, inst) => sum + inst.puissance, 0);
+        // Filtrer les installations avec des coordonnées valides
+        const installationsFiltrees = installations.filter(installation => {
+            return installation.latitude && installation.longitude && 
+                   !isNaN(installation.latitude) && !isNaN(installation.longitude);
+        });
+
+        if (installationsFiltrees.length === 0) {
+            showToast('Aucune installation trouvée pour cette année dans ce département');
+            document.getElementById('loading').style.display = 'none';
+            btn.classList.remove('loading');
+            return;
+        }
+
+        // Calcule les statistiques
+        const nbInstallations = installationsFiltrees.length;
+        const puissanceTotale = installationsFiltrees.reduce((sum, inst) => sum + (parseFloat(inst.puissance_crete) || 0), 0);
         const puissanceMoyenne = puissanceTotale / nbInstallations;
 
         // Affiche les statistiques dans la page
         document.getElementById('nb-installations').textContent = nbInstallations;
-        document.getElementById('puissance-totale').textContent = puissanceTotale.toFixed(1);
-        document.getElementById('puissance-moyenne').textContent = puissanceMoyenne.toFixed(1);
+        document.getElementById('puissance-totale').textContent = (puissanceTotale / 1000).toFixed(1); // Conversion en MW
+        document.getElementById('puissance-moyenne').textContent = (puissanceMoyenne / 1000).toFixed(1); // Conversion en MW
         document.getElementById('stats').style.display = 'flex';
 
         // Ajoute un marqueur pour chaque installation sur la carte
-        installations.forEach(installation => {
-            const marker = L.marker([installation.lat, installation.lng])
-                .bindPopup(`
-                    <div class="custom-popup">
-                        <div class="popup-title">${installation.nom}</div>
-                        <div class="popup-info"><strong>Localité:</strong> ${installation.localite}</div>
-                        <div class="popup-info"><strong>Puissance:</strong> ${installation.puissance} MW</div>
-                        <div class="popup-info"><strong>Année:</strong> ${annee}</div>
-                        <a href="#" class="popup-link" onclick="voirDetails(${installation.id})">Voir détails</a>
-                    </div>
-                `);
-            markersGroup.addLayer(marker);
+        installationsFiltrees.forEach(installation => {
+            const lat = parseFloat(installation.latitude);
+            const lng = parseFloat(installation.longitude);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                const marker = L.marker([lat, lng])
+                    .bindPopup(`
+                        <div class="custom-popup">
+                            <div class="popup-title">Installation ${installation.commune || 'Inconnue'}</div>
+                            <div class="popup-info"><strong>Commune:</strong> ${installation.commune || 'Non renseignée'}</div>
+                            <div class="popup-info"><strong>Code postal:</strong> ${installation.code_postal || 'Non renseigné'}</div>
+                            <div class="popup-info"><strong>Puissance crête:</strong> ${installation.puissance_crete ? (installation.puissance_crete / 1000).toFixed(2) + ' kW' : 'Non renseignée'}</div>
+                            <div class="popup-info"><strong>Nombre de panneaux:</strong> ${installation.nb_panneaux || 'Non renseigné'}</div>
+                            <div class="popup-info"><strong>Date:</strong> ${installation.date ? new Date(installation.date).toLocaleDateString('fr-FR') : 'Non renseignée'}</div>
+                            <div class="popup-info"><strong>Installeur:</strong> ${installation.installeur || 'Non renseigné'}</div>
+                            <div class="popup-info"><strong>Marque panneaux:</strong> ${installation.marque_panneau || 'Non renseignée'}</div>
+                            <div class="popup-info"><strong>Marque onduleur:</strong> ${installation.marque_ondulateur || 'Non renseignée'}</div>
+                        </div>
+                    `);
+                markersGroup.addLayer(marker);
+            }
         });
 
         // Ajuste la vue de la carte pour englober tous les marqueurs
-        if (installations.length > 0) {
+        if (installationsFiltrees.length > 0 && markersGroup.getLayers().length > 0) {
             const group = new L.featureGroup(markersGroup.getLayers());
             map.fitBounds(group.getBounds().pad(0.1));
         }
 
+        showToast(`${nbInstallations} installation(s) trouvée(s) pour ${annee} dans le département ${departement}`);
+
+    } catch (error) {
+        console.error('Erreur lors de la recherche:', error);
+        showToast('Erreur lors de la récupération des données');
+    } finally {
         // Cache le loading et enlève l'animation du bouton
         document.getElementById('loading').style.display = 'none';
         btn.classList.remove('loading');
-    }, 1000);
+    }
 }
 
 // Affiche un toast (notification temporaire) avec le message passé en paramètre
@@ -130,13 +146,6 @@ function showToast(message) {
     setTimeout(() => {
         toastContainer.remove();
     }, 3000);
-}
-
-// Fonction appelée lors du clic sur "Voir détails" dans une popup
-function voirDetails(installationId) {
-    showToast(`Redirection vers la page détail de l'installation ID: ${installationId}`);
-    // Ici, on pourrait rediriger vers une page de détail réelle
-    // window.location.href = `detail.html?id=${installationId}`;
 }
 
 // Animation d'entrée pour les éléments du formulaire et des stats à l'ouverture de la page
