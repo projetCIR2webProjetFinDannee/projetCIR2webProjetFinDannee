@@ -189,7 +189,7 @@ async function showDetailPage(installationId) {
                         </div>
                         <div class="card search-card mb-4">
                             <div class="card-header bg-transparent border-0 pt-4">
-                                <h4 class="text-center mb-0">Installation ${formattedData.id}</h4>
+                                <h4 class="text-center mb-0">Installation ${data.commune}</h4>
                                 <p class="text-center text-muted mb-0">Installée le ${formattedData.date}</p>
                             </div>
                             <div class="card-body p-4">
