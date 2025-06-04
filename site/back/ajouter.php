@@ -38,7 +38,7 @@
             </a>
         </div>
         <h2 class="text-center mb-4">Ajouter une installation</h2>
-        <form method="post" action="request.php">
+        <form method="post" action="traitement_modification.php">
             <div class="row g-3">
                 <!-- Identifiant (lecture seule) -->
                 <div class="col-md-6">
@@ -54,7 +54,7 @@
 
                 <!-- Adresse -->
                 <div class="col-md-6">
-                    <label class="form-label">Adresse</label>
+                    <label class="form-label">Code insee</label>
                     <input type="text" class="form-control" name="adresse" value="">
                 </div>
 
@@ -99,9 +99,19 @@
                     <input type="text" class="form-control" name="orientation" value="">
                 </div>
 
+                 <div class="col-md-4">
+                    <label class="form-label">Orientation optimale</label>
+                    <input type="text" class="form-control" name="orientation" value="">
+                </div>
+
                 <!-- Inclinaison -->
                 <div class="col-md-4">
                     <label class="form-label">Inclinaison</label>
+                    <input type="text" class="form-control" name="inclinaison" value="">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Inclinaison optimale </label>
                     <input type="text" class="form-control" name="inclinaison" value="">
                 </div>
 
@@ -132,6 +142,11 @@
                 <!-- Installateur -->
                 <div class="col-md-6">
                     <label class="form-label">Installateur</label>
+                    <input type="text" class="form-control" name="installateur" value="">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Production pugis</label>
                     <input type="text" class="form-control" name="installateur" value="">
                 </div>
 

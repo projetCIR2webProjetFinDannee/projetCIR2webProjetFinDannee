@@ -42,99 +42,107 @@
             <div class="row g-3">
                 <!-- Identifiant (lecture seule) -->
                 <div class="col-md-6">
-                    <label class="form-label">Identifiant</label>
-                    <input type="text" class="form-control" name="id" value="INST-2024-001" readonly>
-                </div>
-
-                <!-- Date -->
-                <div class="col-md-6">
                     <label class="form-label">Date d'installation</label>
-                    <input type="date" class="form-control" name="date" value="2024-03-15">
+                    <input type="date" class="form-control" name="date" value="">
                 </div>
 
                 <!-- Adresse -->
                 <div class="col-md-6">
-                    <label class="form-label">Adresse</label>
-                    <input type="text" class="form-control" name="adresse" value="29000 Quimper">
+                    <label class="form-label">Code insee</label>
+                    <input type="text" class="form-control" name="adresse" value="">
                 </div>
 
                 <!-- Coordonnées GPS -->
                 <div class="col-md-3">
                     <label class="form-label">Latitude</label>
-                    <input type="text" class="form-control" name="latitude" value="48.0000">
+                    <input type="text" class="form-control" name="latitude" value="">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Longitude</label>
-                    <input type="text" class="form-control" name="longitude" value="-4.0962">
+                    <input type="text" class="form-control" name="longitude" value="">
                 </div>
 
                 <!-- Surface -->
                 <div class="col-md-4">
                     <label class="form-label">Surface</label>
-                    <input type="text" class="form-control" name="surface" value="45 m²">
+                    <input type="text" class="form-control" name="surface" value="">
                 </div>
 
                 <!-- Puissance -->
                 <div class="col-md-4">
                     <label class="form-label">Puissance totale</label>
-                    <input type="text" class="form-control" name="puissance" value="5.2 kW">
+                    <input type="text" class="form-control" name="puissance" value="">
                 </div>
 
                 <!-- Nombre de panneaux -->
                 <div class="col-md-4">
                     <label class="form-label">Nombre de panneaux</label>
-                    <input type="number" class="form-control" name="nbPanneaux" value="12">
+                    <input type="number" class="form-control" name="nbPanneaux" value="">
                 </div>
 
                 <!-- Nombre d'onduleurs -->
                 <div class="col-md-4">
                     <label class="form-label">Nombre d'onduleurs</label>
-                    <input type="number" class="form-control" name="nbOndulateurs" value="1">
+                    <input type="number" class="form-control" name="nbOndulateurs" value="">
                 </div>
 
                 <!-- Orientation -->
                 <div class="col-md-4">
                     <label class="form-label">Orientation</label>
-                    <input type="text" class="form-control" name="orientation" value="Sud">
+                    <input type="text" class="form-control" name="orientation" value="">
+                </div>
+
+                 <div class="col-md-4">
+                    <label class="form-label">Orientation optimale</label>
+                    <input type="text" class="form-control" name="orientation" value="">
                 </div>
 
                 <!-- Inclinaison -->
                 <div class="col-md-4">
                     <label class="form-label">Inclinaison</label>
-                    <input type="text" class="form-control" name="inclinaison" value="30°">
+                    <input type="text" class="form-control" name="inclinaison" value="">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Inclinaison optimale </label>
+                    <input type="text" class="form-control" name="inclinaison" value="">
                 </div>
 
                 <!-- Marque onduleur -->
                 <div class="col-md-6">
                     <label class="form-label">Marque Onduleur</label>
-                    <input type="text" class="form-control" name="marqueOnduleur" value="SMA">
+                    <input type="text" class="form-control" name="marqueOnduleur" value="">
                 </div>
 
                 <!-- Modèle onduleur -->
                 <div class="col-md-6">
                     <label class="form-label">Modèle Onduleur</label>
-                    <input type="text" class="form-control" name="modeleOnduleur" value="Sunny Boy 5.0">
+                    <input type="text" class="form-control" name="modeleOnduleur" value="">
                 </div>
 
                 <!-- Marque panneaux -->
                 <div class="col-md-6">
                     <label class="form-label">Marque Panneaux</label>
-                    <input type="text" class="form-control" name="marquePanneaux" value="SunPower">
+                    <input type="text" class="form-control" name="marquePanneaux" value="">
                 </div>
 
                 <!-- Modèle panneaux -->
                 <div class="col-md-6">
                     <label class="form-label">Modèle Panneaux</label>
-                    <input type="text" class="form-control" name="modelePanneaux" value="SPR-X22-370">
+                    <input type="text" class="form-control" name="modelePanneaux" value="">
                 </div>
 
                 <!-- Installateur -->
                 <div class="col-md-6">
                     <label class="form-label">Installateur</label>
-                    <input type="text" class="form-control" name="installateur" value="Solar Tech Bretagne">
+                    <input type="text" class="form-control" name="installateur" value="">
                 </div>
 
+                <div class="col-md-6">
+                    <label class="form-label">Production pugis</label>
+                    <input type="text" class="form-control" name="installateur" value="">
+                </div>
             <!-- Bouton de soumission -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary btn-search btn-lg">Modifier</button>
