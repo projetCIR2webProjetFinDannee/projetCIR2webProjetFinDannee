@@ -93,7 +93,7 @@ function db_getNbPanelBrand($conn) {
     return $result['count'];
 }
 
-function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep): array {
+function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): array {
     $req = "
         SELECT doc.id
         FROM Documentation AS doc
@@ -133,7 +133,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep): array {
         $wherePlaced = true;
     }
     // Limit the number of rows
-    $req .= " LIMIT 20 OFFSET 0;";
+    $req .= " LIMIT 20 OFFSET ".(($page-1)*20).";";
 
     $stmt = $conn->prepare($req);
 
@@ -365,6 +365,16 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     $stmt->execute();
 
     return true;
+}
+
+function db_deleteDoc($conn, $iddoc) {
+    $stmt = $conn->prepare('DELETE FROM Installation WHERE iddoc=:iddoc;');
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
+
+    $stmt = $conn->prepare('DELETE FROM Documentation WHERE iddoc=:iddoc');
+    $stmt->bindParam(':iddoc', $iddoc);
+    $stmt->execute();
 }
 
 ?>
