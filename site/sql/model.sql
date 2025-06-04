@@ -135,7 +135,7 @@ CREATE TABLE Installeur(
 ------------------------------------------------------------
 
 CREATE TABLE Documentation(
-        id                  INT PRIMARY KEY,
+        id                  SERIAL PRIMARY KEY,
         date                Date NOT NULL ,
         lat                 Float NOT NULL ,
         long                Float NOT NULL ,

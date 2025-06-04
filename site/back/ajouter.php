@@ -38,7 +38,7 @@
             </a>
         </div>
         <h2 class="text-center mb-4">Ajouter une installation</h2>
-        <form method="post" action="traitement_modification.php">
+        <form method="post" action="request.php">
             <div class="row g-3">
                 <!-- Date -->
                 <div class="col-md-6">

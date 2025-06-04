@@ -4,8 +4,6 @@ ini_set('display_errors', 1);
 
 include_once("database.php");
 
-header('Content-Type: application/json');
-
 function requestError($msg="") {
     http_response_code(400);
     exit;
@@ -30,6 +28,8 @@ function getAllStats($conn, $year, $region) {
 // Answer to requests
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'GET') {
+    header('Content-Type: application/json');   // Get requests return JSON
+    
     if (isset($_GET['type'])) {
         if ($_GET['type'] == 'stats') {
             if (isset($_GET['year']) && isset($_GET['region'])) {
@@ -55,7 +55,7 @@ if ($method == 'GET') {
             if (isset($_GET['id'])) {
                 $install = db_getDocuInfos($conn, $_GET['id']);
                 if ($install === false) {
-                    http_response_code(400);
+                    requestError();
                 }
                 else {
                     http_response_code(200);
@@ -75,13 +75,45 @@ if ($method == 'GET') {
         requestError();
     }
 }
+
 else if ($method == "POST") {
+    // Add an installation 
     if (isset($_POST['date'], $_POST['insee'], $_POST['latitude'], $_POST['longitude'], $_POST['surface'], $_POST['puissance'], $_POST['nbPanneaux'],
         $_POST['nbOndulateurs'], $_POST['orientation'], $_POST['inclinaison'], $_POST['marqueOnduleur'], $_POST['modeleOnduleur'],
         $_POST['marquePanneaux'], $_POST['modelePanneaux'], $_POST['installateur'], $_POST['prod_pvgis'])) 
     {
+        // Define optimum inclination
+        if (isset($_POST['inclinaison_opti'])) {
+            $incl_opti = intval($_POST['inclinaison_opti']);
+        }
+        else {
+            $incl_opti = null;
+        }
+
+        // Define optimum orientation
+        if (isset($_POST['orientation_opti'])) {
+            $orient_opti = $_POST['orientation_opti'];
+        }
+        else {
+            $orient_opti = null;
+        }
         
-        echo $_POST['date'];
+        $result = db_addInstallation($conn, $_POST['date'], $_POST['insee'], floatval($_POST['latitude']),floatval($_POST['longitude']),
+            intval($_POST['surface']), intval($_POST['puissance']), intval($_POST['nbPanneaux']), intval($_POST['nbOndulateurs']),
+            intval($_POST['inclinaison']), $_POST['orientation'], $_POST['marqueOnduleur'], $_POST['modeleOnduleur'],
+            $_POST['marquePanneaux'], $_POST['modelePanneaux'], $_POST['installateur'], intval($_POST['prod_pvgis']),
+            $incl_opti, $orient_opti
+        );
+        if ($result) {
+            http_response_code(200);
+        }
+        else {
+            requestError();
+        }
+        exit;
+    }
+    else {
+        requestError();
     }
 }
 

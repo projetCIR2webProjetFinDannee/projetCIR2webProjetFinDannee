@@ -247,8 +247,7 @@ function db_CommuneExists($conn, $insee): bool {
 // Generic function to get the id of a row where name corresponds to the table
 // Compatible with tables that have attributes 'id' and 'nom'
 function db_getId($conn, $table, $name) {
-    $stmt = $conn->prepare('SELECT id FROM :table WHERE nom=:name');
-    $stmt->bindParam(':table', $table);
+    $stmt = $conn->prepare("SELECT id FROM ".$table." WHERE nom=:name;");
     $stmt->bindParam(':name', $name);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -257,43 +256,53 @@ function db_getId($conn, $table, $name) {
         return false;
     }
     else {
-        return $result['id'];
+        return intval($result['id']);
     }
 }
 
 // Generic function to add a name to the given table
 // Compatible with tables that have attributes 'id' and 'nom'
 function db_addName($conn, $table, $name) {
-    $brand_id = db_getId($conn, $table, $name);
-    if ($brand_id === false) {
+    $id = db_getId($conn, $table, $name);
+    if ($id === false) {
         // Add line to table
-        $stmt = $conn->prepare('INSERT INTO :table (nom) VALUES (:name);');
-        $stmt->bindParam(':table', $table);
+        $stmt = $conn->prepare("INSERT INTO ".$table." (nom) VALUES (:name);");
         $stmt->bindParam(':name', $name);
         $stmt->execute();
-        $brand_id = db_getId($conn, $table, $name);
+        $id = db_getId($conn, $table, $name);
     }
-    return $brand_id;
+    return $id;
 }
 
 // Generic function to get id where ids match
 // Compatible with tables that have an attribute 'id' two attributes to link to other tables
+// Table, link1 and link2 should NEVER come from client
 function db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2) {
-    $stmt = $conn->prepare('SELECT id FROM :table WHERE :link1=:id1 AND :link2=:id2');
-    $stmt->bindParam(':table', $table);
-    $stmt->bindParam(':link1', $link1);
-    $stmt->bindParam(':link2', $link2);
+    $stmt = $conn->prepare("SELECT id FROM ".$table." WHERE ".$link1."=:id1 AND ".$link2."=:id2");
     $stmt->bindParam(':id1', $id1);
     $stmt->bindParam(':id2', $id2);
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result === false) {
         return false;
     }
     else {
-        return $result['id'];
+        return intval($result['id']);
     }
+}
+
+function db_addLink($conn, $table, $link1, $link2, $id1, $id2) {
+    $result_id = db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2);
+    if ($result_id === false) {
+        // Add line to table
+        $stmt = $conn->prepare("INSERT INTO ".$table." (".$link1.", ".$link2.") VALUES (:id1, :id2);");
+        $stmt->bindParam(':id1', $id1);
+        $stmt->bindParam(':id2', $id2);
+        $stmt->execute();
+        $result_id = db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2);
+    }
+    return $result_id;
 }
 
 function db_addOndulator($conn, $brand, $modele) {
@@ -304,17 +313,49 @@ function db_addOndulator($conn, $brand, $modele) {
     $modele_id = db_addName($conn, "Ondulateur_Modele", $modele);
 
     // Add ondulator if necessary
-    $ondul_id = db_getIdLinks($conn, "Ondulateur", "id_Ondulateur_Modele", "id_Ondulateur_Marque", $modele_id, $brand_id);
-    
+    $ondul_id = db_addLink($conn, "Ondulateur", "id_Ondulateur_Modele", "id_Ondulateur_Marque", $modele_id, $brand_id);
+    return $ondul_id;
+}
+
+function db_addPanel($conn, $brand, $modele) {
+    // Add brand if necessary
+    $brand_id = db_addName($conn, "Panneau_Marque", $brand);
+
+    // Add modele if necessary
+    $modele_id = db_addName($conn, "Panneau_Modele", $modele);
+
+    // Add ondulator if necessary
+    $panel_id = db_addLink($conn, "Panneau", "id_Panneau_Modele", "id_Panneau_Marque", $modele_id, $brand_id);
+    return $panel_id;
 }
 
 function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss, $nbPanels, $nbOnduls, $incl, $orient, $brandOndul, $modeleOndul, $brandPanel, $modelePanel, $installer, $pvgis, $incl_opti=null, $orient_opti=null): bool {
     if (!db_CommuneExists($conn, $insee)) {
         return false;   // Cannot insert installation
     }
-    $req = "";
+    $panel_id = db_addPanel($conn, $brandPanel, $modelePanel);
+    $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
+    $installer_id = db_addName($conn, "Installeur", $installer);
+
+    $req = "INSERT INTO Documentation (date, lat, long, nb_panneaux, nb_ondul, puiss_crete, surface, pente, pente_optimum, orientation, orientation_optimum, production_pvgis, code_insee, id_Panneau, id_Ondulateur, id_Installeur)
+            VALUES (:date, :lat, :long, :nb_panneaux, :nb_ondul, :puiss_crete, :surface, :pente, :pente_opti, :orient, :orient_opti, :prod_pvgis, :insee, :id_pan, :id_ondul, :id_inst);";
     $stmt = $conn->prepare($req);
-    // $stmt->bindParam();
+    $stmt->bindParam(':date', $date);
+    $stmt->bindParam(':lat', $lat);
+    $stmt->bindParam(':long', $long);
+    $stmt->bindParam(':surface', $surface);
+    $stmt->bindParam(':puiss_crete', $puiss);
+    $stmt->bindParam(':nb_panneaux', $nbPanels);
+    $stmt->bindParam(':nb_ondul', $nbOnduls);
+    $stmt->bindParam(':pente', $incl);
+    $stmt->bindParam(':pente_opti', $incl_opti, PDO::PARAM_NULL);
+    $stmt->bindParam(':orient', $orient);
+    $stmt->bindParam(':orient_opti', $orient_opti, PDO::PARAM_NULL);
+    $stmt->bindParam(':prod_pvgis', $pvgis);
+    $stmt->bindParam(':insee', $insee);
+    $stmt->bindParam(':id_pan', $panel_id);
+    $stmt->bindParam(':id_ondul', $ondul_id);
+    $stmt->bindParam(':id_inst', $installer_id);
     $stmt->execute();
 
     return true;
