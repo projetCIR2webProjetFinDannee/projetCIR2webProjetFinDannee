@@ -1,4 +1,3 @@
-// Initialize tooltips and toasts
 document.addEventListener('DOMContentLoaded', function() {
     // Animation d'entrée
     setTimeout(() => {
@@ -42,61 +41,82 @@ function performSearch() {
 
 function updateResults(onduleur, panneaux, departement) {
     const container = document.getElementById('resultsContainer');
-    const mockData = [
-        {
-            title: `Installation ${onduleur || 'SMA'} - ${panneaux || 'SunPower'}`,
-            details: `15/03/2024 - 12 panneaux ${panneaux || 'SunPower'} - 45m² - 5.2kW - ${departement || '29'} Finistère`,
-            icon: 'bi-lightning-charge'
-        },
-        {
-            title: `Installation ${onduleur || 'Fronius'} - ${panneaux || 'LG'}`,
-            details: `22/02/2024 - 8 panneaux ${panneaux || 'LG'} - 32m² - 3.8kW - ${departement || '35'} Ille-et-Vilaine`,
-            icon: 'bi-sun'
-        },
-        {
-            title: `Installation ${onduleur || 'Huawei'} - ${panneaux || 'Jinko'}`,
-            details: `08/01/2024 - 16 panneaux ${panneaux || 'Jinko'} - 56m² - 6.4kW - ${departement || '56'} Morbihan`,
-            icon: 'bi-battery-charging'
-        }
-    ];
 
-    container.innerHTML = '';
-    
-    mockData.forEach((data, index) => {
-        const resultItem = document.createElement('div');
-        resultItem.className = 'result-item mb-3';
-        resultItem.onclick = () => selectResult(resultItem);
-        resultItem.style.opacity = '0';
-        resultItem.style.transform = 'translateY(20px)';
+    // Correction de l'URL pour correspondre au backend PHP
+    fetch(`../back/request.php?type=search&marqueOndulateur=${onduleur || 'all'}&marquePanneaux=${panneaux || 'all'}&numDepartement=${departement || 'all'}`)
+        .then(response => response.json())
+        .then(async data => {
+            container.innerHTML = '';
+
+            // Le backend retourne un objet avec une propriété 'results' qui contient les IDs
+            const idList = data.results || [];
+
+            if (!Array.isArray(idList) || idList.length === 0) {
+                container.innerHTML = '<div class="alert alert-warning">Aucun résultat trouvé.</div>';
+                return;
+            }
+
+            // Récupérer les infos pour chaque id
+            const dataList = await Promise.all(
+                idList.map(async (id) => {
+                    try {
+                        // Correction de l'URL pour récupérer les détails
+                        const res = await fetch(`request.php?type=info&id=${id}`);
+                        const data = await res.json();
+                        return {
+                            id: id,
+                            title: `Installation ${id}`,
+                            details: `${data.commune} (${data.code_postal}) - ${data.marque_panneau}`,
+                            fullData: data
+                        };
+                    } catch (e) {
+                        console.error('Erreur lors du chargement des détails pour l\'ID:', id, e);
+                        return { 
+                            id: id, 
+                            title: `Installation ${id}`, 
+                            details: "Erreur de chargement",
+                            fullData: null
+                        };
+                    }
+                })
+            );
+
+            dataList.forEach((data, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item mb-3';
+                resultItem.onclick = () => selectResult(resultItem);
+                resultItem.style.opacity = '0';
+                resultItem.style.transform = 'translateY(20px)';
         
-        resultItem.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi ${data.icon} me-3 text-primary fs-4"></i>
-                <div class="flex-grow-1">
-                    <strong>${data.title}</strong><br>
-                    <small class="text-muted">${data.details}</small>
+            resultItem.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi ${data.icon} me-3 text-primary fs-4"></i>
+                    <div class="flex-grow-1">
+                        <strong>${data.title}</strong><br>
+                        <small class="text-muted">${data.details}</small>
+                    </div>
+                    <a href="modifier_dev.php">
+                    <button class="btn btn-primary btn-lg me-2" onclick="modifierInstallation(this)">
+                        <small>Modifier</small>
+                    </button>
+                    </a>
+                    <button class="btn btn-danger btn-lg me-2" onclick="supprimerInstallation(this)" style="background-color: #dc3545; border-color: #dc3545; color: white;">
+                        <small>Supprimer</small>
+                    </button>
+                    <i class="bi bi-chevron-right text-muted"></i>
                 </div>
-                <a href="modifier_dev.php">
-                <button class="btn btn-primary btn-lg me-2" onclick="modifierInstallation(this)">
-                    <small>Modifier</small>
-                </button>
-                </a>
-                <button class="btn btn-danger btn-lg me-2" onclick="supprimerInstallation(this)" style="background-color: #dc3545; border-color: #dc3545; color: white;">
-                    <small>Supprimer</small>
-                </button>
-                <i class="bi bi-chevron-right text-muted"></i>
-            </div>
-        `;
-        
-        container.appendChild(resultItem);
-        
-        // Animate appearance
-        setTimeout(() => {
-            resultItem.style.transition = 'all 0.5s ease';
-            resultItem.style.opacity = '1';
-            resultItem.style.transform = 'translateY(0)';
-        }, index * 200);
-    });
+            `;
+            
+            container.appendChild(resultItem);
+            
+            // Animate appearance
+            setTimeout(() => {
+                resultItem.style.transition = 'all 0.5s ease';
+                resultItem.style.opacity = '1';
+                resultItem.style.transform = 'translateY(0)';
+            }, index * 200);
+        });
+        });
 }
 
 function selectResult(element) {
