@@ -106,6 +106,21 @@
                                     <select class="form-select form-control-custom" id="annee">
                                         <option value="">Sélectionner une année</option>
                                         <!-- Liste des années -->
+                                         <option value="2015">2000</option>
+                                         <option value="2015">2001</option>
+                                         <option value="2015">2002</option>
+                                         <option value="2015">2003</option>
+                                         <option value="2015">2004</option>
+                                         <option value="2015">2005</option>
+                                         <option value="2015">2006</option>
+                                         <option value="2015">2007</option>
+                                         <option value="2015">2008</option>
+                                         <option value="2015">2009</option>
+                                         <option value="2015">2010</option>
+                                         <option value="2015">2011</option>
+                                         <option value="2015">2012</option>
+                                         <option value="2015">2013</option>
+                                         <option value="2015">2014</option>
                                         <option value="2015">2015</option>
                                         <option value="2016">2016</option>
                                         <option value="2017">2017</option>
