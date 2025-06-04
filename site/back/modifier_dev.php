@@ -40,6 +40,12 @@
         <h2 class="text-center mb-4">Modification de l'installation</h2>
         <form method="post" action="traitement_modification.php">
             <div class="row g-3">
+                <!-- Identifiant -->
+                <div class="col-md-6">
+                    <label class="form-label">Identifiant</label>
+                    <input type="text" class="form-control" name="id" value="">
+                </div>
+
                 <!-- Date -->
                 <div class="col-md-6">
                     <label class="form-label">Date d'installation</label>
