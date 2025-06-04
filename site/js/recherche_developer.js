@@ -65,7 +65,7 @@ function updateResults(onduleur, panneaux, departement) {
                         const data = await res.json();
                         return {
                             id: id,
-                            title: `Installation ${id}`,
+                            title: `Installation ${data.commune}`,
                             details: `${data.commune} (${data.code_postal}) - ${data.marque_panneau}`,
                             fullData: data
                         };

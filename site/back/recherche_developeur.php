@@ -11,7 +11,6 @@
     <!-- CSS commun -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
-    <link rel="stylesheet" href="../css/recherche_dev.css">
     <style>
         html, body {
             height: 100%;
