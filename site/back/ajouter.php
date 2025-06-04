@@ -40,12 +40,6 @@
         <h2 class="text-center mb-4">Ajouter une installation</h2>
         <form method="post" action="traitement_modification.php">
             <div class="row g-3">
-                <!-- Identifiant (lecture seule) -->
-                <div class="col-md-6">
-                    <label class="form-label">Identifiant</label>
-                    <input type="text" class="form-control" name="id" value="" readonly>
-                </div>
-
                 <!-- Date -->
                 <div class="col-md-6">
                     <label class="form-label">Date d'installation</label>
@@ -55,7 +49,7 @@
                 <!-- Adresse -->
                 <div class="col-md-6">
                     <label class="form-label">Code insee</label>
-                    <input type="text" class="form-control" name="adresse" value="">
+                    <input type="text" class="form-control" name="insee" value="">
                 </div>
 
                 <!-- Coordonnées GPS -->
@@ -101,7 +95,7 @@
 
                  <div class="col-md-4">
                     <label class="form-label">Orientation optimale</label>
-                    <input type="text" class="form-control" name="orientation" value="">
+                    <input type="text" class="form-control" name="orientation_opti" value="">
                 </div>
 
                 <!-- Inclinaison -->
@@ -112,7 +106,7 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Inclinaison optimale </label>
-                    <input type="text" class="form-control" name="inclinaison" value="">
+                    <input type="text" class="form-control" name="inclinaison_opti" value="">
                 </div>
 
                 <!-- Marque onduleur -->
@@ -146,8 +140,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Production pugis</label>
-                    <input type="text" class="form-control" name="installateur" value="">
+                    <label class="form-label">Production pvgis</label>
+                    <input type="text" class="form-control" name="prod_pvgis" value="">
                 </div>
 
             <!-- Bouton de soumission -->

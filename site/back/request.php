@@ -75,6 +75,15 @@ if ($method == 'GET') {
         requestError();
     }
 }
+else if ($method == "POST") {
+    if (isset($_POST['date'], $_POST['insee'], $_POST['latitude'], $_POST['longitude'], $_POST['surface'], $_POST['puissance'], $_POST['nbPanneaux'],
+        $_POST['nbOndulateurs'], $_POST['orientation'], $_POST['inclinaison'], $_POST['marqueOnduleur'], $_POST['modeleOnduleur'],
+        $_POST['marquePanneaux'], $_POST['modelePanneaux'], $_POST['installateur'], $_POST['prod_pvgis'])) 
+    {
+        
+        echo $_POST['date'];
+    }
+}
 
 requestError();
 ?>

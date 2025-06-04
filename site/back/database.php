@@ -93,7 +93,7 @@ function db_getNbPanelBrand($conn) {
     return $result['count'];
 }
 
-function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep) {
+function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep): array {
     $req = "
         SELECT doc.id
         FROM Documentation AS doc
@@ -179,7 +179,145 @@ function db_getDocuInfos($conn, $iddoc) {
 }
 
 function db_getAllLocs($conn, $dep=null, $year=null) {
-    // Get all locs corresponding to given dep and year
+    $req = "
+        SELECT doc.id, doc.lat AS latitude, doc.long AS longitude, doc.date,
+               doc.puiss_crete AS puissance_crete, doc.nb_panneaux,
+               com.nom AS commune, com.code_postal,
+               inst.nom AS installeur,
+               p_marque.nom AS marque_panneau,
+               o_marque.nom AS marque_ondulateur
+        FROM Documentation AS doc
+        JOIN Commune AS com ON doc.code_insee = com.code_insee
+        JOIN Installeur AS inst ON doc.id_Installeur = inst.id
+        JOIN Panneau AS p ON doc.id_Panneau = p.id
+        JOIN Panneau_Marque AS p_marque ON p.id_Panneau_Marque = p_marque.id
+        JOIN Ondulateur AS ond ON doc.id_Ondulateur = ond.id
+        JOIN Ondulateur_Marque AS o_marque ON ond.id_Ondulateur_Marque = o_marque.id
+    ";
+
+    $wherePlaced = false;
+
+    // Filtre par département
+    if ($dep !== null && $dep !== 'all') {
+        $req .= " WHERE com.code_dep = :dep";
+        $wherePlaced = true;
+    }
+
+    // Filtre par année
+    if ($year !== null && $year !== 'all') {
+        $year_start = $year . '-01-01';
+        $year_end = ($year + 1) . '-01-01';
+
+        if ($wherePlaced) {
+            $req .= " AND";
+        } else {
+            $req .= " WHERE";
+        }
+        $req .= " doc.date >= :year_start AND doc.date < :year_end";
+        $wherePlaced = true;
+    }
+
+    // Limiter les résultats pour éviter une surcharge
+    $req .= " LIMIT 100";
+
+    $stmt = $conn->prepare($req);
+
+    if ($dep !== null && $dep !== 'all') {
+        $stmt->bindParam(':dep', $dep);
+    }
+
+    if ($year !== null && $year !== 'all') {
+        $stmt->bindParam(':year_start', $year_start);
+        $stmt->bindParam(':year_end', $year_end);
+    }
+
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+function db_CommuneExists($conn, $insee): bool {
+    $stmt = $conn->prepare('SELECT count(code_insee) FROM Commune WHERE code_insee=:insee;');
+    $stmt->bindParam(':insee', $insee);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['count'] > 0;
+}
+
+// Generic function to get the id of a row where name corresponds to the table
+// Compatible with tables that have attributes 'id' and 'nom'
+function db_getId($conn, $table, $name) {
+    $stmt = $conn->prepare('SELECT id FROM :table WHERE nom=:name');
+    $stmt->bindParam(':table', $table);
+    $stmt->bindParam(':name', $name);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result === false) {
+        return false;
+    }
+    else {
+        return $result['id'];
+    }
+}
+
+// Generic function to add a name to the given table
+// Compatible with tables that have attributes 'id' and 'nom'
+function db_addName($conn, $table, $name) {
+    $brand_id = db_getId($conn, $table, $name);
+    if ($brand_id === false) {
+        // Add line to table
+        $stmt = $conn->prepare('INSERT INTO :table (nom) VALUES (:name);');
+        $stmt->bindParam(':table', $table);
+        $stmt->bindParam(':name', $name);
+        $stmt->execute();
+        $brand_id = db_getId($conn, $table, $name);
+    }
+    return $brand_id;
+}
+
+// Generic function to get id where ids match
+// Compatible with tables that have an attribute 'id' two attributes to link to other tables
+function db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2) {
+    $stmt = $conn->prepare('SELECT id FROM :table WHERE :link1=:id1 AND :link2=:id2');
+    $stmt->bindParam(':table', $table);
+    $stmt->bindParam(':link1', $link1);
+    $stmt->bindParam(':link2', $link2);
+    $stmt->bindParam(':id1', $id1);
+    $stmt->bindParam(':id2', $id2);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($result === false) {
+        return false;
+    }
+    else {
+        return $result['id'];
+    }
+}
+
+function db_addOndulator($conn, $brand, $modele) {
+    // Add brand if necessary
+    $brand_id = db_addName($conn, "Ondulateur_Marque", $brand);
+
+    // Add modele if necessary
+    $modele_id = db_addName($conn, "Ondulateur_Modele", $modele);
+
+    // Add ondulator if necessary
+    $ondul_id = db_getIdLinks($conn, "Ondulateur", "id_Ondulateur_Modele", "id_Ondulateur_Marque", $modele_id, $brand_id);
+    
+}
+
+function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss, $nbPanels, $nbOnduls, $incl, $orient, $brandOndul, $modeleOndul, $brandPanel, $modelePanel, $installer, $pvgis, $incl_opti=null, $orient_opti=null): bool {
+    if (!db_CommuneExists($conn, $insee)) {
+        return false;   // Cannot insert installation
+    }
+    $req = "";
+    $stmt = $conn->prepare($req);
+    // $stmt->bindParam();
+    $stmt->execute();
+
+    return true;
 }
 
 ?>
