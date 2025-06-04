@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="mb-0">
                 <strong>Solutions possibles :</strong>
                 <ul class="mb-2 mt-2">
-                    <li>Vérifiez que le fichier <code>../api/statistics.php</code> existe</li>
+                    <li>Vérifiez que le fichier <code>../back/request.php</code> existe</li>
                     <li>Vérifiez la connexion à la base de données</li>
                     <li>Regardez les logs du serveur pour plus de détails</li>
                     <li>Testez l'API directement dans votre navigateur</li>
