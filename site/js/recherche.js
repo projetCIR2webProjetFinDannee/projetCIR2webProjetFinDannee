@@ -1,4 +1,3 @@
-// Initialize tooltips and toasts
 document.addEventListener('DOMContentLoaded', function() {
     // Animation d'entrée
     setTimeout(() => {
@@ -42,22 +41,45 @@ function performSearch() {
 
 function updateResults(onduleur, panneaux, departement) {
     const container = document.getElementById('resultsContainer');
-    // Utilise un fichier request côté serveur pour interroger la base de données (méthode GET)
-    const params = new URLSearchParams({
-        marqueOnduleur: onduleur,
-        marquePanneaux: panneaux,
-        numDepartement: departement
-    }).toString();
 
-    fetch(`../back/search?request.php${params}`)
+    // Correction de l'URL pour correspondre au backend PHP
+    fetch(`../back/request.php?type=search&marqueOndulateur=${onduleur || 'all'}&marquePanneaux=${panneaux || 'all'}&numDepartement=${departement || 'all'}`)
         .then(response => response.json())
-        .then(dataList => {
+        .then(async data => {
             container.innerHTML = '';
 
-            if (!Array.isArray(dataList) || dataList.length === 0) {
+            // Le backend retourne un objet avec une propriété 'results' qui contient les IDs
+            const idList = data.results || [];
+
+            if (!Array.isArray(idList) || idList.length === 0) {
                 container.innerHTML = '<div class="alert alert-warning">Aucun résultat trouvé.</div>';
                 return;
             }
+
+            // Récupérer les infos pour chaque id
+            const dataList = await Promise.all(
+                idList.map(async (id) => {
+                    try {
+                        // Correction de l'URL pour récupérer les détails
+                        const res = await fetch(`../back/request.php?type=info&id=${id}`);
+                        const data = await res.json();
+                        return {
+                            id: id,
+                            title: `Installation ${id}`,
+                            details: `${data.commune} (${data.code_postal}) - ${data.marque_panneau}`,
+                            fullData: data
+                        };
+                    } catch (e) {
+                        console.error('Erreur lors du chargement des détails pour l\'ID:', id, e);
+                        return { 
+                            id: id, 
+                            title: `Installation ${id}`, 
+                            details: "Erreur de chargement",
+                            fullData: null
+                        };
+                    }
+                })
+            );
 
             dataList.forEach((data, index) => {
                 const resultItem = document.createElement('div');
@@ -67,12 +89,11 @@ function updateResults(onduleur, panneaux, departement) {
                 resultItem.style.transform = 'translateY(20px)';
 
                 resultItem.innerHTML = `
-                    <div class="d-flex align-items-center">
-                        <a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${data.id})"></a>
+                    <div class="d-flex align-items-center" <a href="#" class="text-decoration-none" onclick="event.stopPropagation(); showDetailPage(${data.id})"></a>>
                         <i class="bi ${data.icon || 'bi-lightning-charge'} me-3 text-primary fs-4"></i>
                         <div class="flex-grow-1">
-                            <strong>${data.title || data.id}</strong><br>
-                            <small class="text-muted">${data.details || ''}</small>
+                            <strong>${data.title}</strong><br>
+                            <small class="text-muted">${data.details}</small>
                         </div>
                         <i class="bi bi-chevron-right text-muted"></i>
                     </div>
@@ -90,24 +111,27 @@ function updateResults(onduleur, panneaux, departement) {
         })
         .catch(error => {
             container.innerHTML = '<div class="alert alert-danger">Erreur lors de la récupération des résultats.</div>';
-            console.error(error);
+            console.error('Erreur lors de la recherche:', error);
         });
-    }
+}
 
-    function selectResult(element) {
-        // Remove previous selection
-        document.querySelectorAll('.result-item').forEach(item => {
-            item.classList.remove('selected');
-        });
-        
-        // Add selection
-        element.classList.add('selected');
-        
-        setTimeout(() => {
-            element.classList.remove('selected');
-            const title = element.querySelector('strong').textContent;
-        }, 800);
-    }
+function selectResult(element) {
+    // Remove previous selection
+    document.querySelectorAll('.result-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+    
+    // Add selection
+    element.classList.add('selected');
+    
+    setTimeout(() => {
+        element.classList.remove('selected');
+        const title = element.querySelector('strong').textContent;
+    }, 800);
+}
+
+// Variable globale pour stocker les données détaillées
+let detailData = {};
 
 async function showDetailPage(installationId) {
     // Masquer le contenu principal
@@ -120,13 +144,36 @@ async function showDetailPage(installationId) {
 
     try {
         // Récupérer les données détaillées depuis le serveur
-        const response = await fetch(`../back/detail?request.php&id=${installationId}`);
+        const response = await fetch(`../back/request.php?type=info&id=${installationId}`);
         if (!response.ok) throw new Error('Erreur lors de la récupération des détails');
         const data = await response.json();
-        if (!data || !data.id) throw new Error('Données non trouvées');
+        if (!data) throw new Error('Données non trouvées');
 
         // Stocker pour le PDF
         detailData[installationId] = data;
+
+        // Formater les données pour l'affichage
+        const formattedData = {
+            id: installationId,
+            date: data.date || 'Non spécifiée',
+            latitude: data.latitude || 'N/A',
+            longitude: data.longitude || 'N/A',
+            adresse: `${data.commune || 'Commune inconnue'} (${data.code_postal || 'N/A'})`,
+            surface: data.surface ? `${data.surface} m²` : 'Non spécifiée',
+            puissance: data.puissance_crete ? `${data.puissance_crete} kW` : 'Non spécifiée',
+            nbPanneaux: data.nb_panneaux || 'N/A',
+            nbOndulateurs: data.nb_ondulateurs || 'N/A',
+            orientation: data.orientation ? `${data.orientation}°` : 'Non spécifiée',
+            inclinaison: data.pente ? `${data.pente}°` : 'Non spécifiée',
+            marqueOnduleur: data.marque_ondulateur || 'Non spécifiée',
+            modeleOnduleur: data.modele_ondulateur || 'Non spécifié',
+            marquePanneaux: data.marque_panneau || 'Non spécifiée',
+            modelePanneaux: data.modele_panneau || 'Non spécifié',
+            productionAnnuelle: data.production_pvgis ? `${data.production_pvgis} kWh` : 'Non calculée',
+            economieAnnuelle: data.production_pvgis ? `${data.production_pvgis * 21} €` : 'Non calculée', 
+            co2Evite: data.production_pvgis ? `${data.production_pvgis * 56} grammes` : 'Non calculée', 
+            installateur: data.installeur || 'Non spécifié'
+        };
 
         // Générer le HTML de la page de détail
         const detailHTML = `
@@ -134,43 +181,43 @@ async function showDetailPage(installationId) {
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
                         <div class="d-flex align-items-center mb-4">
-                            <button class="tn btn-primary btn-search btn-lg" onclick="hideDetailPage()">
+                            <button class="btn btn-primary btn-search btn-lg" onclick="hideDetailPage()">
                                 <i class="bi bi-arrow-left me-2"></i>
                                 <small>Retour à la recherche</small>
                             </button>
-                            <h2 class="mb-0">Détail de l'installation</h2>
+                            <h2 class="mb-0 ms-3">Détail de l'installation</h2>
                         </div>
                         <div class="card search-card mb-4">
                             <div class="card-header bg-transparent border-0 pt-4">
-                                <h4 class="text-center mb-0">Installation ${data.id}</h4>
-                                <p class="text-center text-muted mb-0">Installée le ${data.date}</p>
+                                <h4 class="text-center mb-0">Installation ${formattedData.id}</h4>
+                                <p class="text-center text-muted mb-0">Installée le ${formattedData.date}</p>
                             </div>
                             <div class="card-body p-4">
                                 <div class="row mb-4">
                                     <div class="col-md-6">
                                         <h5><i class="bi bi-geo-alt icon-custom"></i>Localisation</h5>
-                                        <p class="mb-3">${data.latitude}  ${data.longitude} ,${data.adresse}</p>
+                                        <p class="mb-3">${formattedData.latitude}, ${formattedData.longitude}<br>${formattedData.adresse}</p>
                                         <h5><i class="bi bi-rulers icon-custom"></i>Caractéristiques</h5>
                                         <ul class="list-unstyled">
-                                            <li><strong>Surface:</strong> ${data.surface}</li>
-                                            <li><strong>Puissance totale:</strong> ${data.puissance}</li>
-                                            <li><strong>Nombre de panneaux:</strong> ${data.nbPanneaux}</li>
-                                            <li><strong>Nombre d'ondulateurs:</strong> ${data.nbOndulateurs}</li>
-                                            <li><strong>Orientation:</strong> ${data.orientation}</li>
-                                            <li><strong>Inclinaison:</strong> ${data.inclinaison}</li>
+                                            <li><strong>Surface:</strong> ${formattedData.surface}</li>
+                                            <li><strong>Puissance crête:</strong> ${formattedData.puissance}</li>
+                                            <li><strong>Nombre de panneaux:</strong> ${formattedData.nbPanneaux}</li>
+                                            <li><strong>Nombre d'ondulateurs:</strong> ${formattedData.nbOndulateurs}</li>
+                                            <li><strong>Orientation:</strong> ${formattedData.orientation}</li>
+                                            <li><strong>Inclinaison:</strong> ${formattedData.inclinaison}</li>
                                         </ul>
                                     </div>
                                     <div class="col-md-6">
                                         <h5><i class="bi bi-cpu icon-custom"></i>Équipements</h5>
                                         <div class="bg-light p-3 rounded mb-3">
                                             <h6>Onduleur</h6>
-                                            <p class="mb-1"><strong>Marque:</strong> ${data.marqueOnduleur}</p>
-                                            <p class="mb-0"><strong>Modèle:</strong> ${data.modeleOnduleur}</p>
+                                            <p class="mb-1"><strong>Marque:</strong> ${formattedData.marqueOnduleur}</p>
+                                            <p class="mb-0"><strong>Modèle:</strong> ${formattedData.modeleOnduleur}</p>
                                         </div>
                                         <div class="bg-light p-3 rounded">
                                             <h6>Panneaux photovoltaïques</h6>
-                                            <p class="mb-1"><strong>Marque:</strong> ${data.marquePanneaux}</p>
-                                            <p class="mb-1"><strong>Modèle:</strong> ${data.modelePanneaux}</p>
+                                            <p class="mb-1"><strong>Marque:</strong> ${formattedData.marquePanneaux}</p>
+                                            <p class="mb-1"><strong>Modèle:</strong> ${formattedData.modelePanneaux}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -178,21 +225,21 @@ async function showDetailPage(installationId) {
                                     <div class="col-md-4">
                                         <div class="text-center p-3 border rounded bg-success bg-opacity-10">
                                             <i class="bi bi-lightning-charge fs-1 text-success"></i>
-                                            <h5 class="text-success">${data.productionAnnuelle}</h5>
+                                            <h5 class="text-success">${formattedData.productionAnnuelle}</h5>
                                             <p class="mb-0">Production annuelle estimée</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="text-center p-3 border rounded bg-warning bg-opacity-10">
                                             <i class="bi bi-currency-euro fs-1 text-warning"></i>
-                                            <h5 class="text-warning">${data.economieAnnuelle}</h5>
+                                            <h5 class="text-warning">${formattedData.economieAnnuelle}</h5>
                                             <p class="mb-0">Économies annuelles</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="text-center p-3 border rounded bg-info bg-opacity-10">
                                             <i class="bi bi-tree fs-1 text-info"></i>
-                                            <h5 class="text-info">${data.co2Evite}</h5>
+                                            <h5 class="text-info">${formattedData.co2Evite}</h5>
                                             <p class="mb-0">CO₂ évité par an</p>
                                         </div>
                                     </div>
@@ -200,13 +247,13 @@ async function showDetailPage(installationId) {
                                 <div class="row">
                                     <div class="col-md-6">
                                         <h5><i class="bi bi-building icon-custom"></i>Installateur</h5>
-                                        <p class="mb-3">${data.installateur}</p>
+                                        <p class="mb-3">${formattedData.installateur}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn btn-primary me-3" onclick="generatePDF(detailData[${installationId}])">
+                            <button class="btn btn-primary me-3" onclick="generatePDF(${installationId})">
                                 <i class="bi bi-download me-2"></i>Télécharger le rapport PDF
                             </button>
                         </div>
@@ -222,7 +269,7 @@ async function showDetailPage(installationId) {
         alert("Impossible de charger les détails de l'installation.");
         document.querySelector('.container.my-5').style.display = 'block';
         document.querySelector('.footer-custom').style.display = 'block';
-        console.error(error);
+        console.error('Erreur lors du chargement des détails:', error);
     }
 }
 
@@ -248,78 +295,114 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-async function downloadPDF(id) {
+async function generatePDF(installationId) {
+    // Vérifier si jsPDF est disponible
+    if (typeof window.jspdf === 'undefined') {
+        alert('La bibliothèque jsPDF n\'est pas chargée. Veuillez vérifier que le script est inclus dans votre page.');
+        return;
+    }
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    const data = {
-        1: { titre: "Installation INST-2024-001", details: "12 panneaux SunPower - 5.2 kW à Quimper" },
-        2: { titre: "Installation INST-2024-002", details: "8 panneaux LG - 3.8 kW à Rennes" },
-        3: { titre: "Installation INST-2024-003", details: "16 panneaux Jinko - 6.4 kW à Lorient" }
-    };
-
-    const info = data[id];
-    if (!info) {
+    // Récupérer les données stockées
+    const data = detailData[installationId];
+    if (!data) {
         alert("Données manquantes pour générer le PDF.");
         return;
     }
 
-    doc.setFontSize(16);
-    doc.text(info.titre, 20, 20);
-    doc.setFontSize(12);
-    doc.text(info.details, 20, 40);
-
-    doc.save(`Rapport_${info.titre.replace(/\s+/g, "_")}.pdf`);
-}
-
-let detailData = {};
-
-async function generatePDF(data) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
     // Titre
     doc.setFontSize(18);
-    doc.text(`Rapport d'installation - ${data.id}`, 20, 20);
+    doc.text(`Rapport d'installation - ${installationId}`, 20, 20);
 
     // Informations principales
     doc.setFontSize(12);
-    doc.text(`Date d'installation : ${data.date}`, 20, 30);
-    doc.text(`Adresse : ${data.adresse}`, 20, 40);
-    doc.text(`Coordonnées GPS : ${data.latitude}, ${data.longitude}`, 20, 50);
+    doc.text(`Date d'installation : ${data.date || 'Non spécifiée'}`, 20, 35);
+    doc.text(`Commune : ${data.commune || 'Non spécifiée'} (${data.code_postal || 'N/A'})`, 20, 45);
+    doc.text(`Coordonnées GPS : ${data.latitude || 'N/A'}, ${data.longitude || 'N/A'}`, 20, 55);
     
-    // Caractéristiques techniques
-    doc.autoTable({
-        startY: 60,
-        head: [['Catégorie', 'Valeur']],
-        body: [
-            ['Surface', data.surface],
-            ['Puissance totale', data.puissance],
-            ['Nombre de panneaux', data.nbPanneaux],
-            ['Nombre d’ondulateurs', data.nbOndulateurs],
-            ['Orientation', data.orientation],
-            ['Inclinaison', data.inclinaison],
-            ['Marque Onduleur', data.marqueOnduleur],
-            ['Modèle Onduleur', data.modeleOnduleur],
-            ['Marque Panneaux', data.marquePanneaux],
-            ['Modèle Panneaux', data.modelePanneaux],
-        ],
-    });
+    // Vérifier si autoTable est disponible
+    if (typeof doc.autoTable === 'function') {
+        // Caractéristiques techniques
+        doc.autoTable({
+            startY: 65,
+            head: [['Caractéristique', 'Valeur']],
+            body: [
+                ['Surface', data.surface ? `${data.surface} m²` : 'Non spécifiée'],
+                ['Puissance crête', data.puissance_crete ? `${data.puissance_crete} kW` : 'Non spécifiée'],
+                ['Nombre de panneaux', data.nb_panneaux || 'N/A'],
+                ['Nombre d\'ondulateurs', data.nb_ondulateurs || 'N/A'],
+                ['Orientation', data.orientation ? `${data.orientation}°` : 'Non spécifiée'],
+                ['Inclinaison', data.pente ? `${data.pente}°` : 'Non spécifiée'],
+            ],
+        });
 
-    // Performances estimées
-    doc.autoTable({
-        startY: doc.lastAutoTable.finalY + 10,
-        head: [['Indicateur', 'Valeur']],
-        body: [
-            ['Production annuelle estimée', data.productionAnnuelle],
-            ['Économies annuelles', data.economieAnnuelle],
-            ['CO₂ évité par an', data.co2Evite],
-        ],
-    });
+        // Équipements
+        doc.autoTable({
+            startY: doc.lastAutoTable.finalY + 10,
+            head: [['Équipement', 'Marque', 'Modèle']],
+            body: [
+                ['Onduleur', data.marque_ondulateur || 'N/A', data.modele_ondulateur || 'N/A'],
+                ['Panneaux', data.marque_panneau || 'N/A', data.modele_panneau || 'N/A'],
+            ],
+        });
 
-    // Installateur
-    doc.text(`Installateur : ${data.installateur}`, 20, doc.lastAutoTable.finalY + 20);
+        // Production
+        if (data.production_pvgis) {
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 10,
+                head: [['Performance', 'Valeur']],
+                body: [
+                    ['Production annuelle estimée (PVGIS)', `${data.production_pvgis} kWh`],
+                ],
+            });
+        }
+
+        // Installateur
+        if (data.installeur) {
+            doc.text(`Installateur : ${data.installeur}`, 20, doc.lastAutoTable.finalY + 20);
+        }
+    } else {
+        // Version simple sans tableau si autoTable n'est pas disponible
+        let yPos = 65;
+        doc.text('=== CARACTÉRISTIQUES TECHNIQUES ===', 20, yPos);
+        yPos += 10;
+        
+        const specs = [
+            `Surface: ${data.surface ? data.surface + ' m²' : 'Non spécifiée'}`,
+            `Puissance crête: ${data.puissance_crete ? data.puissance_crete + ' kW' : 'Non spécifiée'}`,
+            `Nombre de panneaux: ${data.nb_panneaux || 'N/A'}`,
+            `Nombre d'ondulateurs: ${data.nb_ondulateurs || 'N/A'}`,
+            `Orientation: ${data.orientation ? data.orientation + '°' : 'Non spécifiée'}`,
+            `Inclinaison: ${data.pente ? data.pente + '°' : 'Non spécifiée'}`
+        ];
+        
+        specs.forEach(spec => {
+            doc.text(spec, 20, yPos);
+            yPos += 8;
+        });
+        
+        yPos += 10;
+        doc.text('=== ÉQUIPEMENTS ===', 20, yPos);
+        yPos += 10;
+        doc.text(`Onduleur: ${data.marque_ondulateur || 'N/A'} - ${data.modele_ondulateur || 'N/A'}`, 20, yPos);
+        yPos += 8;
+        doc.text(`Panneaux: ${data.marque_panneau || 'N/A'} - ${data.modele_panneau || 'N/A'}`, 20, yPos);
+        
+        if (data.production_pvgis) {
+            yPos += 18;
+            doc.text('=== PRODUCTION ===', 20, yPos);
+            yPos += 10;
+            doc.text(`Production annuelle estimée: ${data.production_pvgis} kWh`, 20, yPos);
+        }
+        
+        if (data.installeur) {
+            yPos += 18;
+            doc.text(`Installateur: ${data.installeur}`, 20, yPos);
+        }
+    }
 
     // Sauvegarde du fichier
-    doc.save(`rapport-${data.id}.pdf`);
+    doc.save(`rapport-installation-${installationId}.pdf`);
 }
