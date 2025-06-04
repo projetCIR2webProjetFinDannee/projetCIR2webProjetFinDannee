@@ -76,15 +76,13 @@ function updateResults(onduleur, panneaux, departement) {
                     <strong>${data.title}</strong><br>
                     <small class="text-muted">${data.details}</small>
                 </div>
-                <button class="tn btn-primary btn-search btn-lg">
-                    <small>
-                        Modifier
-                    </small>
+                <a href="modifier_dev.php">
+                <button class="btn btn-primary btn-lg me-2" onclick="modifierInstallation(this)">
+                    <small>Modifier</small>
                 </button>
-                <button class="tn btn-primary btn-search btn-lg">
-                    <small>
-                        Supprimer
-                    </small>
+                </a>
+                <button class="btn btn-danger btn-lg me-2" onclick="supprimerInstallation(this)" style="background-color: #dc3545; border-color: #dc3545; color: white;">
+                    <small>Supprimer</small>
                 </button>
                 <i class="bi bi-chevron-right text-muted"></i>
             </div>
@@ -114,4 +112,30 @@ function selectResult(element) {
         element.classList.remove('selected');
         const title = element.querySelector('strong').textContent;
     }, 800);
+}
+
+// Fonction pour gérer la modification
+function modifierInstallation(button) {
+    console.log('Modifier installation');
+    // Empêcher la propagation pour éviter de déclencher selectResult
+    event.stopPropagation();
+    // Votre code de modification ici
+}
+
+// Fonction pour gérer la suppression
+function supprimerInstallation(button) {
+    console.log('Supprimer installation');
+    // Empêcher la propagation pour éviter de déclencher selectResult
+    event.stopPropagation();
+    
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette installation ?')) {
+        const resultItem = button.closest('.result-item');
+        resultItem.style.transition = 'all 0.3s ease';
+        resultItem.style.opacity = '0';
+        resultItem.style.transform = 'translateX(-100%)';
+        
+        setTimeout(() => {
+            resultItem.remove();
+        }, 300);
+    }
 }
