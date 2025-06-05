@@ -100,6 +100,11 @@
                         <small>CIR2 2024/2025</small>
                         <small>GROUPE 9</small>
                     </div>
+                    <div class="text-center mt-3">
+                    <a href="../back/login.php" class="btn btn-outline-secondary">
+                        <i class="bi bi-gear-fill"></i> Connexion
+                    </a>
+                </div>
                 </div>
             </div>
         </div>
