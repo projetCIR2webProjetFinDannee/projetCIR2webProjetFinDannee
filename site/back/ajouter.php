@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
+    <script src="../js/ajouter.js"></script>
 </head>
 <body>
     <div class="animated-bg"></div>
