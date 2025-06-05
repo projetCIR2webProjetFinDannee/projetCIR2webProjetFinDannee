@@ -5,7 +5,58 @@ document.addEventListener('DOMContentLoaded', function() {
             el.style.animationDelay = `${index * 0.2}s`;
         });
     }, 100);
+
+    // Charger les données des selects au chargement de la page
+    loadSelectData();
 });
+
+// Fonction pour charger les données des selects
+async function loadSelectData() {
+    try {
+        const response = await fetch('../back/request.php?type=select_data');
+        const data = await response.json();
+        
+        // Remplir le select des marques d'onduleurs
+        const onduleurSelect = document.getElementById('onduleur');
+        onduleurSelect.innerHTML = '<option value="all">Toutes les marques</option>';
+        data.ondulateur_brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            onduleurSelect.appendChild(option);
+        });
+
+        // Remplir le select des marques de panneaux
+        const panneauxSelect = document.getElementById('panneaux');
+        panneauxSelect.innerHTML = '<option value="all">Toutes les marques</option>';
+        data.panel_brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            panneauxSelect.appendChild(option);
+        });
+
+        // Remplir le select des départements
+        const departementSelect = document.getElementById('departement');
+        departementSelect.innerHTML = '<option value="all">Tous les départements</option>';
+        data.departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.code;
+            option.textContent = `${dept.code} - ${dept.nom}`;
+            departementSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des données des selects:', error);
+        
+        // Afficher un message d'erreur dans les selects
+        const selects = ['onduleur', 'panneaux', 'departement'];
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Erreur de chargement</option>';
+        });
+    }
+}
 
 // Search form handler
 document.getElementById('searchForm').addEventListener('submit', function(e) {
@@ -61,7 +112,7 @@ function updateResults(onduleur, panneaux, departement) {
                 idList.map(async (id) => {
                     try {
                         // Correction de l'URL pour récupérer les détails
-                        const res = await fetch(`request.php?type=info&id=${id}`);
+                        const res = await fetch(`../back/request.php?type=info&id=${id}`);
                         const data = await res.json();
                         return {
                             id: id,
@@ -108,14 +159,18 @@ function updateResults(onduleur, panneaux, departement) {
             `;
             
             container.appendChild(resultItem);
-            
-            // Animate appearance
-            setTimeout(() => {
-                resultItem.style.transition = 'all 0.5s ease';
-                resultItem.style.opacity = '1';
-                resultItem.style.transform = 'translateY(0)';
-            }, index * 200);
-        });
+
+                // Animate appearance
+                setTimeout(() => {
+                    resultItem.style.transition = 'all 0.5s ease';
+                    resultItem.style.opacity = '1';
+                    resultItem.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        })
+        .catch(error => {
+            container.innerHTML = '<div class="alert alert-danger">Erreur lors de la récupération des résultats.</div>';
+            console.error('Erreur lors de la recherche:', error);
         });
 }
 
