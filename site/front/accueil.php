@@ -60,7 +60,7 @@
         <p class="text-muted text-center">Plateforme d’analyse des installations photovoltaïques en France.</p>
         <div class="text-center my-4">
             <!-- Image de bannière -->
-            <img src="../../images/panneaux-solaires.jpg" alt="Panneaux solaires" class="fullwidth-banner">
+            <img src="../images/panneaux-solaires.jpg" alt="Panneaux solaires" class="fullwidth-banner">
         </div>
     </div>
 
