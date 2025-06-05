@@ -77,6 +77,8 @@ function performSearch() {
     const onduleur = document.getElementById('onduleur').value;
     const panneaux = document.getElementById('panneaux').value;
     const departement = document.getElementById('departement').value;
+
+    updateResults(onduleur, panneaux, departement);
 }
 
 function updateResults(onduleur, panneaux, departement) {

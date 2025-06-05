@@ -69,7 +69,7 @@ function performSearch() {
     const searchText = searchBtn.querySelector('.search-text');
     const loadingSpinner = searchBtn.querySelector('.loading-spinner');
     
-    // montrer l'état de chargement
+    // Show loading state
     searchText.style.display = 'none';
     loadingSpinner.style.display = 'inline';
     searchBtn.disabled = true;
@@ -77,6 +77,8 @@ function performSearch() {
     const onduleur = document.getElementById('onduleur').value;
     const panneaux = document.getElementById('panneaux').value;
     const departement = document.getElementById('departement').value;
+
+    updateResults(onduleur, panneaux, departement);
 }
 
 function updateResults(onduleur, panneaux, departement) {
@@ -140,7 +142,7 @@ function updateResults(onduleur, panneaux, departement) {
 
                 container.appendChild(resultItem);
 
-                // animation d'entrée
+                // ajouter une animation d'entrée
                 setTimeout(() => {
                     resultItem.style.transition = 'all 0.5s ease';
                     resultItem.style.opacity = '1';
@@ -155,12 +157,12 @@ function updateResults(onduleur, panneaux, departement) {
 }
 
 function selectResult(element) {
-    // enlever la sélection de tous les éléments
+    // enlever la sélection des autres éléments
     document.querySelectorAll('.result-item').forEach(item => {
         item.classList.remove('selected');
     });
     
-    // ajouter la classe 'selected' à l'élément cliqué
+    // ajouter la classe selected à l'élément cliqué
     element.classList.add('selected');
     
     setTimeout(() => {
