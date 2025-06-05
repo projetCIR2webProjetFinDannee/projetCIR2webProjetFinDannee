@@ -146,7 +146,7 @@ function updateResults(onduleur, panneaux, departement) {
                         <strong>${data.title}</strong><br>
                         <small class="text-muted">${data.details}</small>
                     </div>
-                    <a href="modifier_dev.php">
+                    <a href="modifier_dev.php?id=${data.id}">
                     <button class="btn btn-primary btn-lg me-2" onclick="modifierInstallation(this)">
                         <small>Modifier</small>
                     </button>
