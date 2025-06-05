@@ -30,7 +30,7 @@ all_tables = (
     ("Ondulateur_Modele", table_ondul_modele, "(id, nom)"),
     ("Ondulateur", table_ondul, "(id, id_Ondulateur_Modele, id_Ondulateur_marque)"),
     ("Installeur", table_installeur, "(id, nom)"),
-    ("Documentation", table_docu, "(id, date, lat, long, nb_panneaux, nb_ondul, puiss_crete, surface, pente, pente_optimum, orientation, orientation_optimum, production_pvgis, code_insee, id_Panneau, id_Ondulateur, id_Installeur)"),
+    ("Documentation", table_docu, "(id, date, latitude, longitude, nb_panneaux, nb_ondul, puiss_crete, surface, pente, pente_optimum, orientation, orientation_optimum, production_pvgis, code_insee, id_Panneau, id_Ondulateur, id_Installeur)"),
     ("Installation", table_installation, "(id, iddoc)")
 )
 

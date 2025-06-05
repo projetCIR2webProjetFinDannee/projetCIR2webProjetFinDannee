@@ -15,152 +15,164 @@ DROP TABLE IF EXISTS Departement;
 DROP TABLE IF EXISTS Region;
 DROP TABLE IF EXISTS Pays;
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Pays
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Pays(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom Varchar (70) NOT NULL
+        nom VARCHAR (70) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Region
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Region(
-        code Char (2) PRIMARY KEY,
-        nom  Varchar (50) NOT NULL,
-        id_pays INT REFERENCES Pays(id) NOT NULL
+        code CHAR (2) PRIMARY KEY,
+        nom  VARCHAR (50) NOT NULL,
+        id_pays INT NOT NULL,
+        FOREIGN KEY (id_pays) REFERENCES Pays(id)
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Departement
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Departement(
-        code Char (3) PRIMARY KEY,
-        nom Varchar (50) NOT NULL,
-        code_Region Char (2) REFERENCES Region(code) NOT NULL
+        code CHAR (3) PRIMARY KEY,
+        nom VARCHAR (50) NOT NULL,
+        code_Region CHAR (2) NOT NULL,
+        FOREIGN KEY (code_Region) REFERENCES Region(code)
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Commune
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Commune(
-        code_insee Char (5) PRIMARY KEY,
-        nom Varchar (50) NOT NULL,
-        population  Int NOT NULL,
-        code_postal Char (5) NOT NULL,
-        code_dep Char (3) REFERENCES Departement(code) NOT NULL
+        code_insee CHAR (5) PRIMARY KEY,
+        nom VARCHAR (50) NOT NULL,
+        population  INT NOT NULL,
+        code_postal CHAR (5) NOT NULL,
+        code_dep CHAR (3) NOT NULL,
+        FOREIGN KEY (code_dep) REFERENCES Departement(code)
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Panneau Marque
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Panneau_Marque(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom Varchar (50) NOT NULL
+        nom VARCHAR (50) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Panneau Modele
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Panneau_Modele(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom Varchar (50) NOT NULL
+        nom VARCHAR (50) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Panneau
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Panneau(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        id_Panneau_Marque INT REFERENCES Panneau_Marque(id) NOT NULL,
-        id_Panneau_Modele INT REFERENCES Panneau_Modele(id) NOT NULL
+        id_Panneau_Marque INT NOT NULL,
+        id_Panneau_Modele INT NOT NULL,
+        FOREIGN KEY (id_Panneau_Marque) REFERENCES Panneau_Marque(id),
+        FOREIGN KEY (id_Panneau_Modele) REFERENCES Panneau_Modele(id)
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Ondulateur Marque
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Ondulateur_Marque(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom Varchar (50) NOT NULL
+        nom VARCHAR (50) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Ondulateur Modele
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Ondulateur_Modele(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nom Varchar (50) NOT NULL
+        nom VARCHAR (50) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Ondulateur
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Ondulateur(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        id_Ondulateur_Modele INT REFERENCES Ondulateur_Modele(id) NOT NULL,
-        id_Ondulateur_Marque INT REFERENCES Ondulateur_Marque(id) NOT NULL
+        id_Ondulateur_Modele INT NOT NULL,
+        id_Ondulateur_Marque INT NOT NULL,
+        FOREIGN KEY (id_Ondulateur_Modele) REFERENCES Ondulateur_Modele(id),
+        FOREIGN KEY (id_Ondulateur_Marque) REFERENCES Ondulateur_Marque(id)
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Installeur
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Installeur(
         id               INT AUTO_INCREMENT PRIMARY KEY,
-        nom              Varchar (100) NOT NULL
+        nom              VARCHAR (100) NOT NULL
 );
 
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Documentation
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Documentation(
         id                  INT AUTO_INCREMENT PRIMARY KEY,
         date                Date NOT NULL ,
-        lat                 Float NOT NULL ,
-        long                Float NOT NULL ,
-        nb_panneaux         Int NOT NULL ,
-        nb_ondul            Int NOT NULL ,
-        puiss_crete         Int NOT NULL ,
-        surface             Int NOT NULL ,
-        pente               Int NOT NULL ,
-        pente_optimum       Int ,
-        orientation         Varchar (10) NOT NULL ,
-        orientation_optimum Varchar (10) ,
-        production_pvgis    Int,
-        code_insee          Char (5) REFERENCES Commune(code_insee) NOT NULL,
-        id_Panneau          INT REFERENCES Panneau(id) NOT NULL,
-        id_Ondulateur       INT REFERENCES Ondulateur(id) NOT NULL,
-        id_Installeur       INT REFERENCES Installeur(id)
+        latitude            FLOAT NOT NULL ,
+        longitude           FLOAT NOT NULL ,
+        nb_panneaux         INT NOT NULL ,
+        nb_ondul            INT NOT NULL ,
+        puiss_crete         INT NOT NULL ,
+        surface             INT NOT NULL ,
+        pente               INT NOT NULL ,
+        pente_optimum       INT ,
+        orientation         VARCHAR (10) NOT NULL ,
+        orientation_optimum VARCHAR (10) ,
+        production_pvgis    INT,
+        code_insee          CHAR (5) NOT NULL,
+        id_Panneau          INT NOT NULL,
+        id_Ondulateur       INT NOT NULL,
+        id_Installeur       INT,
+        FOREIGN KEY (code_insee) REFERENCES Commune(code_insee),
+        FOREIGN KEY (id_Panneau) REFERENCES Panneau(id),
+        FOREIGN KEY (id_Ondulateur) REFERENCES Ondulateur(id),
+        FOREIGN KEY (id_Installeur) REFERENCES Installeur(id)
 );
 
-------------------------------------------------------------
+-- ----------------------------------------------------------
  -- Table Installation
-------------------------------------------------------------
+-- ----------------------------------------------------------
 
 CREATE TABLE Installation(
         id               INT AUTO_INCREMENT PRIMARY KEY,
-        iddoc INT REFERENCES Documentation(id) NOT NULL
+        iddoc INT NOT NULL,
+        FOREIGN KEY (iddoc) REFERENCES Documentation(id)
 );

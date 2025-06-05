@@ -17,7 +17,7 @@ function dbConnect() {
 }
 
 function db_getNbInstallations($conn) {
-    $stmt = $conn->prepare('SELECT count(id) FROM Installation;');
+    $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Installation;');
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
@@ -27,7 +27,7 @@ function db_getNbInstallationsPerYear($conn, $year) {
     $year_start = $year.'-01-01';
     $year_end = ($year+1).'-01-01';
     $stmt = $conn->prepare('
-        SELECT count(i.id) FROM Installation AS i
+        SELECT count(i.id) AS "count" FROM Installation AS i
         JOIN Documentation AS d ON i.iddoc=d.id
         WHERE date >= :year_start AND date < :year_end;
     ');
@@ -40,7 +40,7 @@ function db_getNbInstallationsPerYear($conn, $year) {
 
 function db_getNbInstallationsPerRegion($conn, $region) {
     $stmt = $conn->prepare(
-        'SELECT count(i.id) FROM Installation AS i
+        'SELECT count(i.id) AS "count" FROM Installation AS i
         JOIN Documentation AS d ON i.iddoc=d.id
         JOIN Commune AS c ON d.code_insee=c.code_insee
         JOIN Departement AS dep ON c.code_dep=dep.code
@@ -56,7 +56,7 @@ function db_getNbInstallationsPerYearRegion($conn, $year, $region) {
     $year_start = $year.'-01-01';
     $year_end = ($year+1).'-01-01';
     $stmt = $conn->prepare(
-        'SELECT count(i.id) FROM Installation AS i
+        'SELECT count(i.id) AS "count" FROM Installation AS i
         JOIN Documentation AS d ON i.iddoc=d.id
         JOIN Commune AS c ON d.code_insee=c.code_insee
         JOIN Departement AS dep ON c.code_dep=dep.code
@@ -73,21 +73,21 @@ function db_getNbInstallationsPerYearRegion($conn, $year, $region) {
 }
 
 function db_getNbInstallers($conn) {
-    $stmt = $conn->prepare('SELECT count(id) FROM Installeur;');
+    $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Installeur;');
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
 }
 
 function db_getNbOndulatorBrand($conn) {
-    $stmt = $conn->prepare('SELECT count(id) FROM Ondulateur_Marque;');
+    $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Ondulateur_Marque;');
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
 }
 
 function db_getNbPanelBrand($conn) {
-    $stmt = $conn->prepare('SELECT count(id) FROM Panneau_Marque;');
+    $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Panneau_Marque;');
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
@@ -157,7 +157,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): arr
 
 function db_getDocuInfos($conn, $iddoc) {
     $stmt = $conn->prepare('
-        SELECT doc.date, doc.lat AS "latitude", doc.long AS "longitude", doc.nb_panneaux, doc.nb_ondul AS "nb_ondulateurs",
+        SELECT doc.date, doc.latitude AS "latitude", doc.longitude AS "longitude", doc.nb_panneaux, doc.nb_ondul AS "nb_ondulateurs",
         doc.surface, doc.puiss_crete AS "puissance_crete", doc.pente, doc.pente_optimum, doc.orientation, doc.orientation_optimum,
         doc.production_pvgis, p_marque.nom AS "marque_panneau", p_modele.nom AS "modele_panneau", o_marque.nom AS "marque_ondulateur",
         o_modele.nom AS "modele_ondulateur", inst.nom AS "installeur", com.code_postal, com.nom AS "commune"
@@ -180,7 +180,7 @@ function db_getDocuInfos($conn, $iddoc) {
 
 function db_getAllLocs($conn, $dep=null, $year=null) {
     $req = "
-        SELECT doc.id, doc.lat AS latitude, doc.long AS longitude, doc.date,
+        SELECT doc.id, doc.latitude AS latitude, doc.longitude AS longitude, doc.date,
                doc.puiss_crete AS puissance_crete, doc.nb_panneaux,
                com.nom AS commune, com.code_postal,
                inst.nom AS installeur,
@@ -390,7 +390,7 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
     $installer_id = db_addName($conn, "Installeur", $installer);
 
-    $req = "INSERT INTO Documentation (date, lat, long, nb_panneaux, nb_ondul, puiss_crete, surface, pente, pente_optimum, orientation, orientation_optimum, production_pvgis, code_insee, id_Panneau, id_Ondulateur, id_Installeur)
+    $req = "INSERT INTO Documentation (date, latitude, longitude, nb_panneaux, nb_ondul, puiss_crete, surface, pente, pente_optimum, orientation, orientation_optimum, production_pvgis, code_insee, id_Panneau, id_Ondulateur, id_Installeur)
             VALUES (:date, :lat, :long, :nb_panneaux, :nb_ondul, :puiss_crete, :surface, :pente, :pente_opti, :orient, :orient_opti, :prod_pvgis, :insee, :id_pan, :id_ondul, :id_inst);";
     $stmt = $conn->prepare($req);
     $stmt->bindParam(':date', $date);
@@ -445,8 +445,8 @@ function db_putInstallation($conn, $iddoc, $date, $insee, $lat, $long, $surface,
     $req = "
     UPDATE Documentation SET
     date=:date
-    lat=:lat
-    long=:long
+    latitude=:lat
+    longitude=:long
     nb_panneaux=:nb_panneaux
     nb_ondul=:nb_ondul
     puiss_crete=:puiss_crete

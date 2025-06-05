@@ -9,6 +9,20 @@
             "name": "installations",
             "database": "installations",
             "username": "postgres"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "database": "installations",
+            "username": "solarpanel",
+            "name": "installations",
+            "askForPassword": true
         }
     ]
 }

@@ -139,8 +139,8 @@ CREATE TABLE Installeur(
 CREATE TABLE Documentation(
         id                  SERIAL PRIMARY KEY,
         date                Date NOT NULL ,
-        lat                 Float NOT NULL ,
-        long                Float NOT NULL ,
+        latitude            Float NOT NULL ,
+        longitude           Float NOT NULL ,
         nb_panneaux         Int NOT NULL ,
         nb_ondul            Int NOT NULL ,
         puiss_crete         Int NOT NULL ,

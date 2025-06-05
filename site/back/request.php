@@ -10,6 +10,9 @@ function requestError($msg="") {
 }
 
 $conn = dbConnect();
+if (!($conn instanceof PDO)) {
+    requestError();
+}
 
 function getAllStats($conn, $year, $region) {
     $stats = array(
