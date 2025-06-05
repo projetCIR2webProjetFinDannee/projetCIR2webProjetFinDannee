@@ -280,7 +280,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
             <!-- Logo et nom du site -->
-            <a class="navbar-brand" href="accueil.php">
+            <a class="navbar-brand" href="../front/accueil.php">
                 <i class="bi bi-lightning-charge"></i>
                 PHOTOVOLTIS
             </a>
@@ -292,17 +292,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="accueil.php">
+                        <a class="nav-link" href="../front/accueil.php">
                             <i class="bi bi-house"></i> Accueil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="recherche.php">
+                        <a class="nav-link" href="../front/recherche.php">
                             <i class="bi bi-search"></i> Recherche
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="carte.php">
+                        <a class="nav-link" href="../front/carte.php">
                             <i class="bi bi-map"></i> Carte
                         </a>
                     </li>
