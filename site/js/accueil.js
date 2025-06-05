@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Fonction pour animer les chiffres (inchangée)
+    // Fonction pour animer les chiffres
     function animerChiffre(element, valeurFinale, duree = 1500) {
         if (!valeurFinale || isNaN(valeurFinale)) {
             element.textContent = 'N/A';
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Fonction pour changer l'année ou la région (conservée pour compatibilité)
+    // Fonction pour changer l'année ou la région
     window.changerParametres = function() {
         const year = prompt('Entrez l\'année (ex: 2024):', DEFAULT_YEAR);
         const region = prompt('Entrez la région (ou "all" pour toutes):', DEFAULT_REGION);

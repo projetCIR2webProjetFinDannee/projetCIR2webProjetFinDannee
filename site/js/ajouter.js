@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const submitBtn = form.querySelector('button[type="submit"]');
     
-    // Messages d'erreur en français
+    // Messages d'erreur
     const errorMessages = {
         required: 'Ce champ est obligatoire',
         invalidDate: 'Veuillez saisir une date valide',
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gestionnaire de soumission
     form.addEventListener('submit', submitForm);
 
-    // Auto-complétion et suggestions (optionnel)
+    // Auto-complétion et suggestions
     function setupAutoComplete() {
         // Suggestions d'orientations communes
         const orientationField = form.querySelector('[name="orientation"]');

@@ -58,7 +58,7 @@ async function loadSelectData() {
     }
 }
 
-// Search form handler
+// changement de l'animation d'entrée pour les résultats
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
     performSearch();
@@ -69,7 +69,7 @@ function performSearch() {
     const searchText = searchBtn.querySelector('.search-text');
     const loadingSpinner = searchBtn.querySelector('.loading-spinner');
     
-    // Show loading state
+    // montrer l'état de chargement
     searchText.style.display = 'none';
     loadingSpinner.style.display = 'inline';
     searchBtn.disabled = true;
@@ -77,17 +77,6 @@ function performSearch() {
     const onduleur = document.getElementById('onduleur').value;
     const panneaux = document.getElementById('panneaux').value;
     const departement = document.getElementById('departement').value;
-
-    // Simulate search delay
-    setTimeout(() => {
-        // Hide loading state
-        searchText.style.display = 'inline';
-        loadingSpinner.style.display = 'none';
-        searchBtn.disabled = false;
-        
-        // Update results
-        updateResults(onduleur, panneaux, departement);
-    }, 2000);
 }
 
 function updateResults(onduleur, panneaux, departement) {
@@ -151,7 +140,7 @@ function updateResults(onduleur, panneaux, departement) {
 
                 container.appendChild(resultItem);
 
-                // Animate appearance
+                // animation d'entrée
                 setTimeout(() => {
                     resultItem.style.transition = 'all 0.5s ease';
                     resultItem.style.opacity = '1';
@@ -166,12 +155,12 @@ function updateResults(onduleur, panneaux, departement) {
 }
 
 function selectResult(element) {
-    // Remove previous selection
+    // enlever la sélection de tous les éléments
     document.querySelectorAll('.result-item').forEach(item => {
         item.classList.remove('selected');
     });
     
-    // Add selection
+    // ajouter la classe 'selected' à l'élément cliqué
     element.classList.add('selected');
     
     setTimeout(() => {
@@ -332,7 +321,7 @@ function hideDetailPage() {
     document.querySelector('.footer-custom').style.display = 'block';
 }
 
-// Add smooth scrolling
+// ajouter un écouteur d'événement pour les liens d'ancrage
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();

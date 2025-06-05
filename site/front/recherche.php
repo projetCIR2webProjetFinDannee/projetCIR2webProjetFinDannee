@@ -11,7 +11,7 @@
     <!-- CSS commun -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
-    <style>
+    <style> //style pour le footer
         
 html, body {
     height: 100%;
@@ -116,7 +116,7 @@ body {
             </div>
         </div>
 
-        <!-- Results Section -->
+        <!-- Section resultat -->
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card results-card fade-in">
