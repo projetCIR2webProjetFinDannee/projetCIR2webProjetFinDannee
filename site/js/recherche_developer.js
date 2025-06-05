@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Fonction pour charger les données des selects
 async function loadSelectData() {
     try {
-        const response = await fetch('../back/request.php?type=select_data');
+        const response = await fetch('../api/request.php?type=select_data');
         const data = await response.json();
         
         // Remplir le select des marques d'onduleurs
@@ -90,7 +90,7 @@ function updateResults(onduleur, panneaux, departement) {
     const container = document.getElementById('resultsContainer');
 
     // Correction de l'URL pour correspondre au backend PHP
-    fetch(`../back/request.php?type=search&marqueOndulateur=${onduleur || 'all'}&marquePanneaux=${panneaux || 'all'}&numDepartement=${departement || 'all'}`)
+    fetch(`../api/request.php?type=search&marqueOndulateur=${onduleur || 'all'}&marquePanneaux=${panneaux || 'all'}&numDepartement=${departement || 'all'}`)
         .then(response => response.json())
         .then(async data => {
             container.innerHTML = '';
@@ -108,7 +108,7 @@ function updateResults(onduleur, panneaux, departement) {
                 idList.map(async (id) => {
                     try {
                         // Correction de l'URL pour récupérer les détails
-                        const res = await fetch(`../back/request.php?type=info&id=${id}`);
+                        const res = await fetch(`../api/request.php?type=info&id=${id}`);
                         const data = await res.json();
                         return {
                             id: id,
@@ -200,7 +200,7 @@ function supprimerInstallation(id) {
     event.stopPropagation();
 
     if (confirm('Êtes-vous sûr de vouloir supprimer cette installation ?')) {
-        fetch(`../back/request.php?id=${id}`, {
+        fetch(`../api/request.php?id=${id}`, {
             method: 'DELETE'
         })
         .then(response => {

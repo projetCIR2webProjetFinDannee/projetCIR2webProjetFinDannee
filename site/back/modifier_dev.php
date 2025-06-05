@@ -116,7 +116,7 @@ if (!isset($_GET['id'])) {
             </a>
         </div>
         <h2 class="text-center mb-4">Modification de l'installation</h2>
-        <form method="put" action="request.php">
+        <form method="put" action="../api/request.php">
             <div class="row g-3">
                 <!-- Date -->
                 <div class="col-md-6">

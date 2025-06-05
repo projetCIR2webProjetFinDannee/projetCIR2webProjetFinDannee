@@ -9,7 +9,7 @@ function fillPage() {
     }
 
     if (installationId) {
-        fetch(`../back/request.php?type=info&id=${installationId}`)
+        fetch(`../api/request.php?type=info&id=${installationId}`)
             .then(response => response.json())
             .then(data => {
                 if (data && !data.error) {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Envoyer la requête PUT
-            const response = await fetch(`request.php?${params.toString()}`, {
+            const response = await fetch(`../api/request.php?${params.toString()}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

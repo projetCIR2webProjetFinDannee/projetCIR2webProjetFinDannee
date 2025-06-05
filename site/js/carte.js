@@ -28,7 +28,7 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
 
 async function loadSelectData() {
     try {
-        const response = await fetch('../back/request.php?type=select_data');
+        const response = await fetch('../api/request.php?type=select_data');
         const data = await response.json();
 
 

@@ -101,7 +101,7 @@ function db_getNbPanelBrand($conn) {
 }
 
 // Donne toute la documentation
-function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): array {
+function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page=1): array {
     $req = "
         SELECT doc.id
         FROM Documentation AS doc
