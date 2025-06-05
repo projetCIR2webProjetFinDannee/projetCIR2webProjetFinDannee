@@ -43,7 +43,8 @@ if ($method == 'GET') {
         }
         else if ($_GET['type'] == 'search') {
             if (isset($_GET['marqueOndulateur']) && isset($_GET['marquePanneaux']) && isset($_GET['numDepartement'])) {
-                $ids = db_getAllDocuIds($conn, $_GET['marqueOndulateur'], $_GET['marquePanneaux'],$_GET['numDepartement']);
+                $page = $_GET['page'] ?? 1;
+                $ids = db_getAllDocuIds($conn, $_GET['marqueOndulateur'], $_GET['marquePanneaux'],$_GET['numDepartement'], $page);
                 echo json_encode($ids);
                 exit;
             }
@@ -116,6 +117,45 @@ else if ($method == "POST") {
             requestError();
         }
         exit;
+    }
+    else {
+        requestError();
+    }
+}
+
+else if ($method == 'PUT') {
+    if (isset($_GET['id'], $_GET['date'], $_GET['insee'], $_GET['latitude'], $_GET['longitude'], $_GET['surface'], $_GET['puissance'], $_GET['nbPanneaux'],
+        $_GET['nbOndulateurs'], $_GET['orientation'], $_GET['inclinaison'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
+        $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], $_GET['prod_pvgis']))
+    {
+        // Define optimum inclination
+        if (isset($_GET['inclinaison_opti'])) {
+            $incl_opti = intval($_GET['inclinaison_opti']);
+        }
+        else {
+            $incl_opti = null;
+        }
+
+        // Define optimum orientation
+        if (isset($_GET['orientation_opti'])) {
+            $orient_opti = $_GET['orientation_opti'];
+        }
+        else {
+            $orient_opti = null;
+        }
+
+        $result = db_putInstallation($conn, $_GET['date'], $_GET['insee'], floatval($_GET['latitude']),floatval($_GET['longitude']),
+            intval($_GET['surface']), intval($_GET['puissance']), intval($_GET['nbPanneaux']), intval($_GET['nbOndulateurs']),
+            intval($_GET['inclinaison']), $_GET['orientation'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
+            $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], intval($_GET['prod_pvgis']),
+            $incl_opti, $orient_opti
+        );
+        if ($result) {
+            http_response_code(200);
+        }
+        else {
+            requestError();
+        }
     }
     else {
         requestError();

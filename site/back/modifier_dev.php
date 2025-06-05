@@ -40,16 +40,22 @@
         <h2 class="text-center mb-4">Modification de l'installation</h2>
         <form method="post" action="traitement_modification.php">
             <div class="row g-3">
-                <!-- Identifiant (lecture seule) -->
+                <!-- Identifiant -->
+                <div class="col-md-6">
+                    <label class="form-label">Identifiant</label>
+                    <input type="text" class="form-control" name="id" value="">
+                </div>
+
+                <!-- Date -->
                 <div class="col-md-6">
                     <label class="form-label">Date d'installation</label>
                     <input type="date" class="form-control" name="date" value="">
                 </div>
-
+                
                 <!-- Adresse -->
                 <div class="col-md-6">
                     <label class="form-label">Code insee</label>
-                    <input type="text" class="form-control" name="adresse" value="">
+                    <input type="text" class="form-control" name="insee" value="">
                 </div>
 
                 <!-- Coordonnées GPS -->
@@ -95,7 +101,7 @@
 
                  <div class="col-md-4">
                     <label class="form-label">Orientation optimale</label>
-                    <input type="text" class="form-control" name="orientation" value="">
+                    <input type="text" class="form-control" name="orientation_opti" value="">
                 </div>
 
                 <!-- Inclinaison -->
@@ -106,7 +112,7 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Inclinaison optimale </label>
-                    <input type="text" class="form-control" name="inclinaison" value="">
+                    <input type="text" class="form-control" name="inclinaison_opti" value="">
                 </div>
 
                 <!-- Marque onduleur -->
@@ -140,8 +146,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label">Production pugis</label>
-                    <input type="text" class="form-control" name="installateur" value="">
+                    <label class="form-label">Production pvgis</label>
+                    <input type="text" class="form-control" name="pvgis" value="">
                 </div>
             <!-- Bouton de soumission -->
             <div class="text-center mt-4">
