@@ -111,7 +111,6 @@ function updateResults(onduleur, panneaux, departement) {
             const dataList = await Promise.all(
                 idList.map(async (id) => {
                     try {
-                        // Correction de l'URL pour récupérer les détails
                         const res = await fetch(`../back/request.php?type=info&id=${id}`);
                         const data = await res.json();
                         return {

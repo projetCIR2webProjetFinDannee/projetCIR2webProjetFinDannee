@@ -151,7 +151,7 @@ function updateResults(onduleur, panneaux, departement) {
                         <small>Modifier</small>
                     </button>
                     </a>
-                    <button class="btn btn-danger btn-lg me-2" onclick="supprimerInstallation(this)" style="background-color: #dc3545; border-color: #dc3545; color: white;">
+                    <button class="btn btn-danger btn-lg me-2" onclick="event.stopPropagation(); supprimerInstallation(${data.id})" style="background-color: #dc3545; border-color: #dc3545; color: white;">
                         <small>Supprimer</small>
                     </button>
                     <i class="bi bi-chevron-right text-muted"></i>
@@ -198,19 +198,40 @@ function modifierInstallation(button) {
 }
 
 // Fonction pour gérer la suppression
-function supprimerInstallation(button) {
+function supprimerInstallation(id) {
     console.log('Supprimer installation');
     // Empêcher la propagation pour éviter de déclencher selectResult
     event.stopPropagation();
-    
+
     if (confirm('Êtes-vous sûr de vouloir supprimer cette installation ?')) {
-        const resultItem = button.closest('.result-item');
-        resultItem.style.transition = 'all 0.3s ease';
-        resultItem.style.opacity = '0';
-        resultItem.style.transform = 'translateX(-100%)';
-        
-        setTimeout(() => {
-            resultItem.remove();
-        }, 300);
+        fetch(`../back/request.php?id=${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Animation de disparition
+                const resultItem = Array.from(document.querySelectorAll('.result-item')).find(item => {
+                    // On cherche l'élément qui contient le bouton cliqué
+                    const btn = item.querySelector('button.btn-danger');
+                    return btn && btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`supprimerInstallation(${id})`);
+                });
+                if (resultItem) {
+                    resultItem.style.transition = 'opacity 0.5s, transform 0.5s';
+                    resultItem.style.opacity = '0';
+                    resultItem.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        resultItem.remove();
+                    }, 500);
+                }
+                console.log('Installation supprimée avec succès');
+            } else {
+                console.error('Erreur lors de la suppression de l\'installation');
+                alert('Erreur lors de la suppression de l\'installation.');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de réseau lors de la suppression:', error);
+            alert('Erreur de réseau lors de la suppression de l\'installation.');
+        });
     }
 }

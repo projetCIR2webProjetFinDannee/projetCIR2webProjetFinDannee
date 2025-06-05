@@ -425,7 +425,7 @@ function db_deleteDoc($conn, $iddoc) {
     $stmt->bindParam(':iddoc', $iddoc);
     $stmt->execute();
 
-    $stmt = $conn->prepare('DELETE FROM Documentation WHERE iddoc=:iddoc');
+    $stmt = $conn->prepare('DELETE FROM Documentation WHERE id=:iddoc');
     $stmt->bindParam(':iddoc', $iddoc);
     $stmt->execute();
 }
