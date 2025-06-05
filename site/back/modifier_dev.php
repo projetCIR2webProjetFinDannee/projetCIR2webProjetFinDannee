@@ -40,12 +40,6 @@
         <h2 class="text-center mb-4">Modification de l'installation</h2>
         <form method="post" action="traitement_modification.php">
             <div class="row g-3">
-                <!-- Identifiant -->
-                <div class="col-md-6">
-                    <label class="form-label">Identifiant</label>
-                    <input type="text" class="form-control" name="id" value="">
-                </div>
-
                 <!-- Date -->
                 <div class="col-md-6">
                     <label class="form-label">Date d'installation</label>
@@ -115,6 +109,11 @@
                     <input type="text" class="form-control" name="inclinaison_opti" value="">
                 </div>
 
+                <div class="col-md-6">
+                    <label class="form-label">Production pvgis</label>
+                    <input type="text" class="form-control" name="pvgis" value="">
+                </div>
+
                 <!-- Marque onduleur -->
                 <div class="col-md-6">
                     <label class="form-label">Marque Onduleur</label>
@@ -144,16 +143,13 @@
                     <label class="form-label">Installateur</label>
                     <input type="text" class="form-control" name="installateur" value="">
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Production pvgis</label>
-                    <input type="text" class="form-control" name="pvgis" value="">
-                </div>
             <!-- Bouton de soumission -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary btn-search btn-lg">Modifier</button>
             </div>
         </form>
     </div>
+
+    <script src="../js/modifier.js"></script>
 </body>
 </html>

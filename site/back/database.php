@@ -169,7 +169,7 @@ function db_getDocuInfos($conn, $iddoc) {
         SELECT doc.date, doc.latitude AS "latitude", doc.longitude AS "longitude", doc.nb_panneaux, doc.nb_ondul AS "nb_ondulateurs",
         doc.surface, doc.puiss_crete AS "puissance_crete", doc.pente, doc.pente_optimum, doc.orientation, doc.orientation_optimum,
         doc.production_pvgis, p_marque.nom AS "marque_panneau", p_modele.nom AS "modele_panneau", o_marque.nom AS "marque_ondulateur",
-        o_modele.nom AS "modele_ondulateur", inst.nom AS "installeur", com.code_postal, com.nom AS "commune"
+        o_modele.nom AS "modele_ondulateur", inst.nom AS "installeur", com.code_postal, com.nom AS "commune", doc.code_insee
         FROM Documentation AS doc
         JOIN Panneau AS p ON doc.id_Panneau=p.id
         JOIN Panneau_Marque AS p_marque ON p.id_Panneau_Marque=p_marque.id
