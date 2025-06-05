@@ -460,71 +460,90 @@ function db_deleteDoc($conn, $iddoc) {
 // Met à jour une installation existante
 // Retourne true si l'installation a été mise à jour, false sinon
 function db_putInstallation($conn, $iddoc, $date, $insee, $lat, $long, $surface, $puiss, $nbPanels, $nbOnduls, $incl, $orient, $brandOndul, $modeleOndul, $brandPanel, $modelePanel, $installer, $pvgis, $incl_opti=null, $orient_opti=null): bool {
-    if (!db_DocExists($conn, $iddoc)) {
-        return false;   // ne peut pas mettre à jour, la documentation n'existe pas
-    }
-    if (!db_CommuneExists($conn, $insee)) {
-        return false;   // ne peut pas mettre à jour, la commune n'existe pas
-    }
-    $panel_id = db_addPanel($conn, $brandPanel, $modelePanel);
-    $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
-    $installer_id = db_addName($conn, "Installeur", $installer);
+    try {
+        if (!db_DocExists($conn, $iddoc)) {
+            error_log("Document n'existe pas: " . $iddoc);
+            return false;   // ne peut pas mettre à jour, la documentation n'existe pas
+        }
+        if (!db_CommuneExists($conn, $insee)) {
+            error_log("Commune n'existe pas: " . $insee);
+            return false;   // ne peut pas mettre à jour, la commune n'existe pas
+        }
+        
+        $panel_id = db_addPanel($conn, $brandPanel, $modelePanel);
+        $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
+        $installer_id = db_addName($conn, "Installeur", $installer);
 
-    // Préparer la requête de mise à jour
-    // Inclure les options d'inclinaison et d'orientation optimum si elles sont fournies
-    $req = "
-    UPDATE Documentation SET
-    date=:date
-    latitude=:lat
-    longitude=:long
-    nb_panneaux=:nb_panneaux
-    nb_ondul=:nb_ondul
-    puiss_crete=:puiss_crete
-    surface=:surface
-    pente=:pente
-    orientation=:orient
-    production_pvgis=:prod_pvgis
-    code_insee=:insee
-    id_Panneau=:id_pan
-    id_Ondulateur=:id_ondul
-    id_Installeur=:id_inst";
-    if ($incl_opti !== null) {
-        $req .= " pente_optimum=:pente_opti";
-    }
-    if ($orient_opti !== null) {
-        $req .= " orientation_optimum=:orient_opti";
-    }
+        // Préparer la requête de mise à jour
+        $req = "UPDATE Documentation SET 
+            date=:date,
+            latitude=:lat,
+            longitude=:long,
+            nb_panneaux=:nb_panneaux,
+            nb_ondul=:nb_ondul,
+            puiss_crete=:puiss_crete,
+            surface=:surface,
+            pente=:pente,
+            orientation=:orient,
+            production_pvgis=:prod_pvgis,
+            code_insee=:insee,
+            id_Panneau=:id_pan,
+            id_Ondulateur=:id_ondul,
+            id_Installeur=:id_inst";
+        
+        if ($incl_opti !== null) {
+            $req .= ", pente_optimum=:pente_opti";
+        }
+        if ($orient_opti !== null) {
+            $req .= ", orientation_optimum=:orient_opti";
+        }
 
-    $req .= " WHERE id=:id;";
-    
-    // Préparer et exécuter la requête
-    $stmt = $conn->prepare($req);
-    $stmt->bindParam(':id', $iddoc);
-    $stmt->bindParam(':date', $date);
-    $stmt->bindParam(':lat', $lat);
-    $stmt->bindParam(':long', $long);
-    $stmt->bindParam(':surface', $surface);
-    $stmt->bindParam(':puiss_crete', $puiss);
-    $stmt->bindParam(':nb_panneaux', $nbPanels);
-    $stmt->bindParam(':nb_ondul', $nbOnduls);
-    $stmt->bindParam(':pente', $incl);
-    $stmt->bindParam(':orient', $orient);
-    $stmt->bindParam(':prod_pvgis', $pvgis);
-    $stmt->bindParam(':insee', $insee);
-    $stmt->bindParam(':id_pan', $panel_id);
-    $stmt->bindParam(':id_ondul', $ondul_id);
-    $stmt->bindParam(':id_inst', $installer_id);
+        $req .= " WHERE id=:id";
 
-    if ($incl_opti !== null) {
-        $stmt->bindParam(':pente_opti', $incl_opti, PDO::PARAM_NULL);
-    }
-    if ($orient_opti !== null) {
-        $stmt->bindParam(':orient_opti', $orient_opti, PDO::PARAM_NULL);
-    }
-    
-    $stmt->execute();
+        // Préparer et exécuter la requête
+        $stmt = $conn->prepare($req);
+        
+        // Bind des paramètres obligatoires
+        $stmt->bindParam(':id', $iddoc, PDO::PARAM_INT);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':lat', $lat);
+        $stmt->bindParam(':long', $long);
+        $stmt->bindParam(':surface', $surface, PDO::PARAM_INT);
+        $stmt->bindParam(':puiss_crete', $puiss, PDO::PARAM_INT);
+        $stmt->bindParam(':nb_panneaux', $nbPanels, PDO::PARAM_INT);
+        $stmt->bindParam(':nb_ondul', $nbOnduls, PDO::PARAM_INT);
+        $stmt->bindParam(':pente', $incl, PDO::PARAM_INT);
+        $stmt->bindParam(':orient', $orient);
+        $stmt->bindParam(':prod_pvgis', $pvgis, PDO::PARAM_INT);
+        $stmt->bindParam(':insee', $insee);
+        $stmt->bindParam(':id_pan', $panel_id, PDO::PARAM_INT);
+        $stmt->bindParam(':id_ondul', $ondul_id, PDO::PARAM_INT);
+        $stmt->bindParam(':id_inst', $installer_id, PDO::PARAM_INT);
 
-    return true;
+        // Bind des paramètres optionnels
+        if ($incl_opti !== null) {
+            $stmt->bindParam(':pente_opti', $incl_opti, PDO::PARAM_INT);
+        }
+        if ($orient_opti !== null) {
+            $stmt->bindParam(':orient_opti', $orient_opti);
+        }
+
+        $result = $stmt->execute();
+        
+        if (!$result) {
+            error_log("Erreur SQL: " . print_r($stmt->errorInfo(), true));
+            return false;
+        }
+
+        return true;
+        
+    } catch (PDOException $e) {
+        error_log("Erreur PDO dans db_putInstallation: " . $e->getMessage());
+        return false;
+    } catch (Exception $e) {
+        error_log("Erreur générale dans db_putInstallation: " . $e->getMessage());
+        return false;
+    }
 }
 
 ?>

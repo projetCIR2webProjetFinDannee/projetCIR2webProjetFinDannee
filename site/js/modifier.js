@@ -45,3 +45,72 @@ function fillPage() {
 }
 
 fillPage();
+
+// Récupérer l'ID de l'installation depuis l'URL
+function getInstallationId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
+}
+
+// Gérer la soumission du formulaire
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault(); // Empêcher la soumission normale du formulaire
+
+        const id = getInstallationId();
+        if (!id) {
+            alert('ID de l\'installation manquant');
+            return;
+        }
+
+        // Collecter les données du formulaire
+        const formData = new FormData(form);
+        
+        // Construire l'URL avec tous les paramètres (car votre backend utilise $_GET)
+        const params = new URLSearchParams();
+        params.append('id', id);
+        params.append('date', formData.get('date'));
+        params.append('insee', formData.get('insee'));
+        params.append('latitude', formData.get('latitude'));
+        params.append('longitude', formData.get('longitude'));
+        params.append('surface', formData.get('surface'));
+        params.append('puissance', formData.get('puissance'));
+        params.append('nbPanneaux', formData.get('nbPanneaux'));
+        params.append('nbOndulateurs', formData.get('nbOndulateurs'));
+        params.append('orientation', formData.get('orientation'));
+        params.append('inclinaison', formData.get('inclinaison'));
+        params.append('marqueOnduleur', formData.get('marqueOnduleur'));
+        params.append('modeleOnduleur', formData.get('modeleOnduleur'));
+        params.append('marquePanneaux', formData.get('marquePanneaux'));
+        params.append('modelePanneaux', formData.get('modelePanneaux'));
+        params.append('installateur', formData.get('installateur'));
+        params.append('prod_pvgis', formData.get('pvgis'));
+
+        // Ajouter les paramètres optionnels s'ils sont présents
+        if (formData.get('orientation_opti')) {
+            params.append('orientation_opti', formData.get('orientation_opti'));
+        }
+        if (formData.get('inclinaison_opti')) {
+            params.append('inclinaison_opti', formData.get('inclinaison_opti'));
+        }
+
+        try {
+            // Envoyer la requête PUT
+            const response = await fetch(`request.php?${params.toString()}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            alert('Installation modifiée avec succès !');
+            // Rediriger vers la page de recherche
+            window.location.href = 'recherche_developeur.php';
+        } catch (error) {
+            console.error('Erreur de réseau:', error);
+            alert('Erreur de réseau lors de la modification');
+        }
+    });
+});

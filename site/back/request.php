@@ -131,43 +131,58 @@ else if ($method == "POST") {
     }
 }
 
-// traitement des requêtes PUT
+// Traitement des requêtes PUT
 else if ($method == 'PUT') {
-    if (isset($_GET['id'], $_GET['date'], $_GET['insee'], $_GET['latitude'], $_GET['longitude'], $_GET['surface'], $_GET['puissance'], $_GET['nbPanneaux'],
-        $_GET['nbOndulateurs'], $_GET['orientation'], $_GET['inclinaison'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
-        $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], $_GET['prod_pvgis']))
+    if (isset($_GET['id'], $_GET['date'], $_GET['insee'], $_GET['latitude'], $_GET['longitude'], 
+              $_GET['surface'], $_GET['puissance'], $_GET['nbPanneaux'], $_GET['nbOndulateurs'], 
+              $_GET['orientation'], $_GET['inclinaison'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
+              $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], $_GET['prod_pvgis'])) 
     {
         // Define optimum inclination
-        if (isset($_GET['inclinaison_opti'])) {
+        $incl_opti = null;
+        if (isset($_GET['inclinaison_opti']) && !empty($_GET['inclinaison_opti'])) {
             $incl_opti = intval($_GET['inclinaison_opti']);
         }
-        else {
-            $incl_opti = null;
-        }
 
-        // Define optimum orientation
-        if (isset($_GET['orientation_opti'])) {
+        // Define optimum orientation  
+        $orient_opti = null;
+        if (isset($_GET['orientation_opti']) && !empty($_GET['orientation_opti'])) {
             $orient_opti = $_GET['orientation_opti'];
         }
-        else {
-            $orient_opti = null;
-        }
 
-        $result = db_putInstallation($conn, $_GET['date'], $_GET['insee'], floatval($_GET['latitude']),floatval($_GET['longitude']),
-            intval($_GET['surface']), intval($_GET['puissance']), intval($_GET['nbPanneaux']), intval($_GET['nbOndulateurs']),
-            intval($_GET['inclinaison']), $_GET['orientation'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
-            $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], intval($_GET['prod_pvgis']),
-            $incl_opti, $orient_opti
+        // CORRECTION : Ajouter l'ID comme premier paramètre
+        $result = db_putInstallation($conn, 
+            $_GET['id'], // ID manquant dans votre code original
+            $_GET['date'], 
+            $_GET['insee'], 
+            floatval($_GET['latitude']),
+            floatval($_GET['longitude']),
+            intval($_GET['surface']), 
+            intval($_GET['puissance']), 
+            intval($_GET['nbPanneaux']), 
+            intval($_GET['nbOndulateurs']),
+            intval($_GET['inclinaison']), 
+            $_GET['orientation'], 
+            $_GET['marqueOnduleur'], 
+            $_GET['modeleOnduleur'],
+            $_GET['marquePanneaux'], 
+            $_GET['modelePanneaux'], 
+            $_GET['installateur'], 
+            intval($_GET['prod_pvgis']),
+            $incl_opti, 
+            $orient_opti
         );
+        
         if ($result) {
             http_response_code(200);
+            echo json_encode(["success" => true, "message" => "Installation modifiée avec succès"]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["success" => false, "message" => "Erreur lors de la modification"]);
         }
-        else {
-            requestError();
-        }
-    }
-    else {
-        requestError();
+    } else {
+        http_response_code(400);
+        echo json_encode(["success" => false, "message" => "Paramètres manquants"]);
     }
 }
 
