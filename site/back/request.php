@@ -14,6 +14,7 @@ if (!($conn instanceof PDO)) {
     requestError();
 }
 
+// fonction pour récupérer toutes les statistiques
 function getAllStats($conn, $year, $region) {
     $stats = array(
         'nb_installs' => db_getNbInstallations($conn),
@@ -28,10 +29,10 @@ function getAllStats($conn, $year, $region) {
     return $stats;
 }
 
-// Answer to requests
+// récupération de la méthode HTTP
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'GET') {
-    header('Content-Type: application/json');   // Get requests return JSON
+    header('Content-Type: application/json');   // réponse au format JSON
     
     if (isset($_GET['type'])) {
         if ($_GET['type'] == 'stats') {
@@ -44,6 +45,7 @@ if ($method == 'GET') {
                 requestError();
             }
         }
+        // endpoint pour récupérer les IDs des installations
         else if ($_GET['type'] == 'search') {
             if (isset($_GET['marqueOndulateur']) && isset($_GET['marquePanneaux']) && isset($_GET['numDepartement'])) {
                 $page = $_GET['page'] ?? 1;
@@ -55,6 +57,7 @@ if ($method == 'GET') {
                 requestError();
             }
         }
+        // endpoint pour récupérer les informations d'une installation
         else if ($_GET['type'] == 'info') {
             if (isset($_GET['id'])) {
                 $install = db_getDocuInfos($conn, $_GET['id']);
@@ -71,6 +74,7 @@ if ($method == 'GET') {
                 requestError();
             }
         }
+        // endpoint pour les menus déroulants
         else if ($_GET['type'] == 'select_data') {
             $selectData = db_getSelectData($conn);
             echo json_encode($selectData);
@@ -85,6 +89,7 @@ if ($method == 'GET') {
     }
 }
 
+// traitement des requêtes POST
 else if ($method == "POST") {
     // Add an installation 
     if (isset($_POST['date'], $_POST['insee'], $_POST['latitude'], $_POST['longitude'], $_POST['surface'], $_POST['puissance'], $_POST['nbPanneaux'],
@@ -126,6 +131,7 @@ else if ($method == "POST") {
     }
 }
 
+// traitement des requêtes PUT
 else if ($method == 'PUT') {
     if (isset($_GET['id'], $_GET['date'], $_GET['insee'], $_GET['latitude'], $_GET['longitude'], $_GET['surface'], $_GET['puissance'], $_GET['nbPanneaux'],
         $_GET['nbOndulateurs'], $_GET['orientation'], $_GET['inclinaison'], $_GET['marqueOnduleur'], $_GET['modeleOnduleur'],
@@ -165,6 +171,7 @@ else if ($method == 'PUT') {
     }
 }
 
+// traitement des requêtes DELETE
 else if ($method == 'DELETE') {
     if (isset($_GET['id'])) {
         db_deleteDoc($conn, $_GET['id']);

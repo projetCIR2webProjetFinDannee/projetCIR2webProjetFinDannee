@@ -11,7 +11,7 @@
     <!-- CSS commun -->
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
-    <style>
+    <style> // affiche le footer en bas de page
         html, body {
             height: 100%;
         }
