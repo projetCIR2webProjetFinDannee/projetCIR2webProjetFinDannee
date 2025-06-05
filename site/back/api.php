@@ -27,7 +27,7 @@ function getAllStats($conn, $year, $region) {
     return $stats;
 }
 
-// Answer to requests
+// Repond aux requêtes GET
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method == 'GET') {
     if (isset($_GET['type'])) {

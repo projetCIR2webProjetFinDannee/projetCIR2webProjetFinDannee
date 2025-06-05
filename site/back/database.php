@@ -2,8 +2,8 @@
 
 include_once('constants.php');
 
-// Connect to database.
-// Use this function before any other listed in this file
+// Connection a la base de données
+// Utilisez cette fonction avant toute autre fonction listée dans ce fichier
 function dbConnect() {
     $dsn = DB_DRIVER.":dbname=".DB_NAME.";host=".DB_SERVER.";port=".DB_PORT;
     try {
@@ -16,6 +16,7 @@ function dbConnect() {
     return $conn;
 }
 
+// Donne le nombre d'installations
 function db_getNbInstallations($conn) {
     $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Installation;');
     $stmt->execute();
@@ -23,6 +24,7 @@ function db_getNbInstallations($conn) {
     return $result['count'];
 }
 
+// Donne le nombre d'installations par année
 function db_getNbInstallationsPerYear($conn, $year) {
     $year_start = $year.'-01-01';
     $year_end = ($year+1).'-01-01';
@@ -38,6 +40,7 @@ function db_getNbInstallationsPerYear($conn, $year) {
     return $result['count'];
 }
 
+// Donne le nombre d'installations par région
 function db_getNbInstallationsPerRegion($conn, $region) {
     $stmt = $conn->prepare(
         'SELECT count(i.id) AS "count" FROM Installation AS i
@@ -52,6 +55,7 @@ function db_getNbInstallationsPerRegion($conn, $region) {
     return $result['count'];
 }
 
+// Donne le nombre d'installations par année et région
 function db_getNbInstallationsPerYearRegion($conn, $year, $region) {
     $year_start = $year.'-01-01';
     $year_end = ($year+1).'-01-01';
@@ -72,6 +76,7 @@ function db_getNbInstallationsPerYearRegion($conn, $year, $region) {
     return $result['count'];
 }
 
+// Donne le nombre d'installateurs
 function db_getNbInstallers($conn) {
     $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Installeur;');
     $stmt->execute();
@@ -79,6 +84,7 @@ function db_getNbInstallers($conn) {
     return $result['count'];
 }
 
+// Donne le nombre de marques d'onduleurs et de panneaux
 function db_getNbOndulatorBrand($conn) {
     $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Ondulateur_Marque;');
     $stmt->execute();
@@ -86,6 +92,7 @@ function db_getNbOndulatorBrand($conn) {
     return $result['count'];
 }
 
+// Donne le nombre de marques de panneaux
 function db_getNbPanelBrand($conn) {
     $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Panneau_Marque;');
     $stmt->execute();
@@ -93,6 +100,7 @@ function db_getNbPanelBrand($conn) {
     return $result['count'];
 }
 
+// Donne toute la documentation
 function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): array {
     $req = "
         SELECT doc.id
@@ -103,14 +111,14 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): arr
         JOIN Ondulateur_Marque AS o_marque ON ond.id_Ondulateur_Marque=o_marque.id
         JOIN Commune AS com ON doc.code_insee=com.code_insee";
 
-    // Add optional parameters, where 'all' means no selection
+    // Ajouter les paramètres optionnels, où 'all' signifie aucune sélection
     $wherePlaced = false;
-    // Ondulator brand
+    // Marque d'onduleur
     if ($ondulatorBrand != 'all') {     
         $req .= " WHERE o_marque.nom LIKE :ond_brand";
         $wherePlaced = true;
     }
-    // Pannel brand
+    // Marque de panneau
     if ($panelBrand != "all") {     
         if ($wherePlaced) {
             $req .= " AND";
@@ -132,7 +140,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): arr
         $req .= " com.code_dep LIKE :dep";
         $wherePlaced = true;
     }
-    // Limit the number of rows
+    // Limiter le nombre de lignes
     $req .= " LIMIT 100 OFFSET ".(($page-1)*20).";";
 
     $stmt = $conn->prepare($req);
@@ -155,6 +163,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): arr
     return array("results" => array_column($result, 'id'));
 }
 
+// Donne les informations d'une installation
 function db_getDocuInfos($conn, $iddoc) {
     $stmt = $conn->prepare('
         SELECT doc.date, doc.latitude AS "latitude", doc.longitude AS "longitude", doc.nb_panneaux, doc.nb_ondul AS "nb_ondulateurs",
@@ -178,6 +187,11 @@ function db_getDocuInfos($conn, $iddoc) {
     return $result;
 }
 
+/**
+ * Récupère toutes les installations avec leurs informations
+ * Optionnellement filtre par département et année
+ * Limite le nombre de résultats à 100 pour éviter une surcharge
+ */
 function db_getAllLocs($conn, $dep=null, $year=null) {
     $req = "
         SELECT doc.id, doc.latitude AS latitude, doc.longitude AS longitude, doc.date,
@@ -280,6 +294,7 @@ function db_getSelectData($conn) {
     );
 }
 
+// Retourne true si la commune avec le code INSEE donné existe, false sinon
 function db_CommuneExists($conn, $insee): bool {
     $stmt = $conn->prepare('SELECT count(code_insee) FROM Commune WHERE code_insee=:insee;');
     $stmt->bindParam(':insee', $insee);
@@ -288,7 +303,7 @@ function db_CommuneExists($conn, $insee): bool {
     return $result['count'] > 0;
 }
 
-// Return true if documentation with the given id exists, false otherwise
+// Retourne true si la documentation avec l'identifiant donné existe, false sinon
 function db_DocExists($conn, $iddoc): bool {
     $stmt = $conn->prepare('SELECT count(id) FROM Documentation WHERE id=:iddoc');
     $stmt->bindParam(':iddoc', $iddoc);
@@ -297,8 +312,8 @@ function db_DocExists($conn, $iddoc): bool {
     return $result['count'] > 0;
 }
 
-// Generic function to get the id of a row where name corresponds to the table
-// Compatible with tables that have attributes 'id' and 'nom'
+// Fonction générique pour obtenir l'id d'une ligne où le nom correspond dans la table
+// Compatible avec les tables ayant les attributs 'id' et 'nom'
 function db_getId($conn, $table, $name) {
     $stmt = $conn->prepare("SELECT id FROM ".$table." WHERE nom=:name;");
     $stmt->bindParam(':name', $name);
@@ -313,8 +328,8 @@ function db_getId($conn, $table, $name) {
     }
 }
 
-// Generic function to add a name to the given table
-// Compatible with tables that have attributes 'id' and 'nom'
+// Fonction générique pour ajouter un nom dans la table donnée
+// Compatible avec les tables ayant les attributs 'id' et 'nom'
 function db_addName($conn, $table, $name) {
     $id = db_getId($conn, $table, $name);
     if ($id === false) {
@@ -327,9 +342,9 @@ function db_addName($conn, $table, $name) {
     return $id;
 }
 
-// Generic function to get id where ids match
-// Compatible with tables that have an attribute 'id' two attributes to link to other tables
-// Table, link1 and link2 should NEVER come from client
+// Fonction générique pour obtenir l'id où les ids correspondent
+// Compatible avec les tables ayant un attribut 'id' et deux attributs pour lier à d'autres tables
+// Table, link1 et link2 ne doivent JAMAIS provenir du client
 function db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2) {
     $stmt = $conn->prepare("SELECT id FROM ".$table." WHERE ".$link1."=:id1 AND ".$link2."=:id2");
     $stmt->bindParam(':id1', $id1);
@@ -345,10 +360,13 @@ function db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2) {
     }
 }
 
+// Fonction générique pour ajouter un lien entre deux tables
+// Compatible avec les tables ayant un attribut 'id' et deux attributs pour lier à d'autres tables
+// Table, link1 et link2 ne doivent JAMAIS provenir du client
 function db_addLink($conn, $table, $link1, $link2, $id1, $id2) {
     $result_id = db_getIdLinks($conn, $table, $link1, $link2, $id1, $id2);
     if ($result_id === false) {
-        // Add line to table
+        //ajouter la ligne dans la table
         $stmt = $conn->prepare("INSERT INTO ".$table." (".$link1.", ".$link2.") VALUES (:id1, :id2);");
         $stmt->bindParam(':id1', $id1);
         $stmt->bindParam(':id2', $id2);
@@ -358,33 +376,41 @@ function db_addLink($conn, $table, $link1, $link2, $id1, $id2) {
     return $result_id;
 }
 
+// Fonction générique pour ajouter un ondulateur
+// Compatible avec les tables ayant un attribut 'id' et deux attributs pour lier à d'autres tables
+// Table, link1 et link2 ne doivent JAMAIS provenir du client
 function db_addOndulator($conn, $brand, $modele) {
-    // Add brand if necessary
+    // Ajouter la marque si nécessaire
     $brand_id = db_addName($conn, "Ondulateur_Marque", $brand);
 
-    // Add modele if necessary
+    // ajouter le modele si nécessaire
     $modele_id = db_addName($conn, "Ondulateur_Modele", $modele);
 
-    // Add ondulator if necessary
+    // ajouter l'ondulateur si nécessaire
     $ondul_id = db_addLink($conn, "Ondulateur", "id_Ondulateur_Modele", "id_Ondulateur_Marque", $modele_id, $brand_id);
     return $ondul_id;
 }
 
+// Fonction générique pour ajouter un panneau
+// Compatible avec les tables ayant un attribut 'id' et deux attributs pour lier à d'autres tables
+// Table, link1 et link2 ne doivent JAMAIS provenir du client
 function db_addPanel($conn, $brand, $modele) {
-    // Add brand if necessary
+    // ajouter la marque si nécessaire
     $brand_id = db_addName($conn, "Panneau_Marque", $brand);
 
-    // Add modele if necessary
+    // ajouter le modele si nécessaire
     $modele_id = db_addName($conn, "Panneau_Modele", $modele);
 
-    // Add ondulator if necessary
+    // ajouter le panneau si nécessaire
     $panel_id = db_addLink($conn, "Panneau", "id_Panneau_Modele", "id_Panneau_Marque", $modele_id, $brand_id);
     return $panel_id;
 }
 
+// Fonction pour ajouter une installation dans la base de données
+// Retourne true si l'installation a été ajoutée, false sinon
 function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss, $nbPanels, $nbOnduls, $incl, $orient, $brandOndul, $modeleOndul, $brandPanel, $modelePanel, $installer, $pvgis, $incl_opti=null, $orient_opti=null): bool {
     if (!db_CommuneExists($conn, $insee)) {
-        return false;   // Cannot insert installation
+        return false;   // ne peut pas ajouter l'installation, la commune n'existe pas
     }
     $panel_id = db_addPanel($conn, $brandPanel, $modelePanel);
     $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
@@ -411,7 +437,7 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     $stmt->bindParam(':id_inst', $installer_id);
     $stmt->execute();
 
-    // Add installation
+    // ajouter l'installation dans la table Installation
     $iddoc = $conn->lastInsertId();
     $stmt = $conn->prepare('INSERT INTO Installation (iddoc) VALUES (:iddoc);');
     $stmt->bindParam(':iddoc', $iddoc);
@@ -420,6 +446,7 @@ function db_addInstallation($conn, $date, $insee, $lat, $long, $surface, $puiss,
     return true;
 }
 
+// Supprime une installation et sa documentation
 function db_deleteDoc($conn, $iddoc) {
     $stmt = $conn->prepare('DELETE FROM Installation WHERE iddoc=:iddoc;');
     $stmt->bindParam(':iddoc', $iddoc);
@@ -430,18 +457,21 @@ function db_deleteDoc($conn, $iddoc) {
     $stmt->execute();
 }
 
+// Met à jour une installation existante
+// Retourne true si l'installation a été mise à jour, false sinon
 function db_putInstallation($conn, $iddoc, $date, $insee, $lat, $long, $surface, $puiss, $nbPanels, $nbOnduls, $incl, $orient, $brandOndul, $modeleOndul, $brandPanel, $modelePanel, $installer, $pvgis, $incl_opti=null, $orient_opti=null): bool {
     if (!db_DocExists($conn, $iddoc)) {
-        return false;   // Cannot find installation to change
+        return false;   // ne peut pas mettre à jour, la documentation n'existe pas
     }
     if (!db_CommuneExists($conn, $insee)) {
-        return false;   // Cannot change position
+        return false;   // ne peut pas mettre à jour, la commune n'existe pas
     }
     $panel_id = db_addPanel($conn, $brandPanel, $modelePanel);
     $ondul_id = db_addOndulator($conn, $brandOndul, $modeleOndul);
     $installer_id = db_addName($conn, "Installeur", $installer);
 
-    // Build request
+    // Préparer la requête de mise à jour
+    // Inclure les options d'inclinaison et d'orientation optimum si elles sont fournies
     $req = "
     UPDATE Documentation SET
     date=:date
@@ -467,7 +497,7 @@ function db_putInstallation($conn, $iddoc, $date, $insee, $lat, $long, $surface,
 
     $req .= " WHERE id=:id;";
     
-    // Bind parameters and execute request
+    // Préparer et exécuter la requête
     $stmt = $conn->prepare($req);
     $stmt->bindParam(':id', $iddoc);
     $stmt->bindParam(':date', $date);
