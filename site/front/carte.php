@@ -78,28 +78,8 @@
                                     <label for="departement" class="form-label">
                                         <i class="bi bi-geo-alt icon-custom"></i>Département
                                     </label>
-                                    <select class="form-select form-control-custom" id="departement">
-                                        <option value="">Sélectionner un département</option>
-                                        <!-- Liste des départements -->
-                                         
-                                        <option value="84">🏔️ Auvergne-Rhône-Alpes</option>
-                                        <option value="27">🍷 Bourgogne-Franche-Comté</option>
-                                        <option value="53">🌊 Bretagne</option>
-                                        <option value="24">🏰 Centre-Val de Loire</option>
-                                        <option value="94">🏝️ Corse</option>
-                                        <option value="44">🍺 Grand Est</option>
-                                        <option value="32">⚒️ Hauts-de-France</option>
-                                        <option value="11">🗼 Île-de-France</option>
-                                        <option value="28">🧀 Normandie</option>
-                                        <option value="75">🍷 Nouvelle-Aquitaine</option>
-                                        <option value="76">☀️ Occitanie</option>
-                                        <option value="52">🏰 Pays de la Loire</option>
-                                        <option value="93">🌴 Provence-Alpes-Côte d'Azur</option>
-                                        <option value="1">🏖️ Guadeloupe</option>
-                                        <option value="2">🌺 Martinique</option>
-                                        <option value="3">🌿 Guyane</option>
-                                        <option value="4">🌋 La Réunion</option>
-                                        <option value="6">🏝️ Mayotte</option>
+                                    <select class="form-control form-control-custom" id="departement">
+                                        <option value="">Chargement...</option>
                                     </select>
                                 </div>
                                 <!-- Sélection de l'année d'installation -->
@@ -110,10 +90,6 @@
                                     <select class="form-select form-control-custom" id="annee">
                                         <option value="">Sélectionner une année</option>
                                         <!-- Liste des années -->
-                                        <option value="2000">2000</option>
-                                        <option value="2001">2001</option>
-                                        <option value="2002">2002</option>
-                                        <option value="2003">2003</option>
                                         <option value="2004">2004</option>
                                         <option value="2005">2005</option>
                                         <option value="2006">2006</option>
@@ -135,7 +111,6 @@
                                         <option value="2022">2022</option>
                                         <option value="2023">2023</option>
                                         <option value="2024">2024</option>
-                                        <option value="2025">2025</option>
                                     </select>
                                 </div>
                                 <!-- Bouton de recherche -->

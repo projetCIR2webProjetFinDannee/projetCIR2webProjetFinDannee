@@ -133,7 +133,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep): array {
         $wherePlaced = true;
     }
     // Limit the number of rows
-    $req .= " LIMIT 20 OFFSET 0;";
+    $req .= " LIMIT 100 OFFSET 0;";
 
     $stmt = $conn->prepare($req);
 
@@ -234,6 +234,50 @@ function db_getAllLocs($conn, $dep=null, $year=null) {
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $result;
+}
+
+/**
+ * Récupère les 20 premières marques d'onduleurs
+ */
+function db_getOndulatorBrands($conn, $limit = 20) {
+    $stmt = $conn->prepare('SELECT nom FROM Ondulateur_Marque ORDER BY RANDOM() LIMIT :limit');
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return array_column($result, 'nom');
+}
+
+/**
+ * Récupère les 20 premières marques de panneaux
+ */
+function db_getPanelBrands($conn, $limit = 20) {
+    $stmt = $conn->prepare('SELECT nom FROM Panneau_Marque ORDER BY RANDOM() LIMIT :limit');
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return array_column($result, 'nom');
+}
+
+/**
+ * Récupère 20 départements au hasard
+ */
+function db_getRandomDepartments($conn, $limit = 20) {
+    $stmt = $conn->prepare('SELECT code, nom FROM Departement ORDER BY RANDOM() LIMIT :limit');
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+}
+
+/**
+ * Récupère les données pour tous les selects
+ */
+function db_getSelectData($conn) {
+    return array(
+        'ondulateur_brands' => db_getOndulatorBrands($conn),
+        'panel_brands' => db_getPanelBrands($conn),
+        'departments' => db_getRandomDepartments($conn)
+    );
 }
 
 function db_CommuneExists($conn, $insee): bool {

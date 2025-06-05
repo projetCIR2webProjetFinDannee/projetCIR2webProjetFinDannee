@@ -67,6 +67,11 @@ if ($method == 'GET') {
                 requestError();
             }
         }
+        else if ($_GET['type'] == 'select_data') {
+            $selectData = db_getSelectData($conn);
+            echo json_encode($selectData);
+            exit;
+        }
         else {
             requestError();
         }

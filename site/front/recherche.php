@@ -12,22 +12,23 @@
     <link rel="stylesheet" href="../css/commun.css">
     <link rel="stylesheet" href="../css/recherche.css">
     <style>
-        html, body {
-            height: 100%;
-        }
+        
+html, body {
+    height: 100%;
+}
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+body {
+    display: flex;
+    flex-direction: column;
+}
 
-        .main-content {
-            flex: 1;
-        }
+.main-content {
+    flex: 1;
+}
 
-        .footer-custom {
-            margin-top: auto;
-        }
+.footer-custom {
+    margin-top: auto;
+}
     </style>
 </head>
 <body>
@@ -78,22 +79,25 @@
                                     <label for="onduleur" class="form-label">
                                         <i class="bi bi-cpu icon-custom"></i>Marque de l'onduleur
                                     </label>
-                                    <input type="text" class="form-control form-control-custom" id="onduleur" 
-                                           placeholder="Ex: SMA, Fronius, Huawei...">
+                                    <select class="form-control form-control-custom" id="onduleur">
+                                        <option value="">Chargement...</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="panneaux" class="form-label">
                                         <i class="bi bi-grid-3x3-gap icon-custom"></i>Marque des panneaux
                                     </label>
-                                    <input type="text" class="form-control form-control-custom" id="panneaux" 
-                                           placeholder="Ex: SunPower, LG, Jinko...">
+                                    <select class="form-control form-control-custom" id="panneaux">
+                                        <option value="">Chargement...</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="departement" class="form-label">
                                         <i class="bi bi-geo-alt icon-custom"></i>Département
                                     </label>
-                                    <input type="text" class="form-control form-control-custom" id="departement" 
-                                           placeholder="Ex: 29, 35, 56...">
+                                    <select class="form-control form-control-custom" id="departement">
+                                        <option value="">Chargement...</option>
+                                    </select>
                                 </div>
                                 <div class="col-12 text-center mt-4">
                                     <button type="submit" class="btn btn-primary btn-search btn-lg">
@@ -148,7 +152,6 @@
             </div>
         </div>
     </footer>
-
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>

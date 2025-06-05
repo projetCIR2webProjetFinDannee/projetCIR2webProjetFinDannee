@@ -1,3 +1,15 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation d'entrée
+    setTimeout(() => {
+        document.querySelectorAll('.fade-in').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.2}s`;
+        });
+    }, 100);
+
+    // Charger les données des selects au chargement de la page
+    loadSelectData();
+});
+
 // Initialisation de la carte Leaflet centrée sur la France
 let map = L.map('map').setView([46.603354, 1.888334], 6);
 // Groupe de marqueurs pour pouvoir les gérer facilement (effacer/ajouter)
@@ -13,6 +25,34 @@ document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Empêche le rechargement de la page
     rechercherInstallations(); // Lance la recherche
 });
+
+async function loadSelectData() {
+    try {
+        const response = await fetch('../back/request.php?type=select_data');
+        const data = await response.json();
+
+
+        // Remplir le select des départements
+        const departementSelect = document.getElementById('departement');
+        departementSelect.innerHTML = '<option value="all">Tous les départements</option>';
+        data.departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.code;
+            option.textContent = `${dept.code} - ${dept.nom}`;
+            departementSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des données des selects:', error);
+        
+        // Afficher un message d'erreur dans les selects
+        const selects = ['departement'];
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Erreur de chargement</option>';
+        });
+    }
+}
 
 // Fonction principale de recherche et d'affichage des installations
 async function rechercherInstallations() {
