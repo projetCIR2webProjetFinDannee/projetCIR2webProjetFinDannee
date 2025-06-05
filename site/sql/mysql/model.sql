@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS Pays;
 ------------------------------------------------------------
 
 CREATE TABLE Pays(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nom Varchar (70) NOT NULL
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE Commune(
 ------------------------------------------------------------
 
 CREATE TABLE Panneau_Marque(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nom Varchar (50) NOT NULL
 );
 
@@ -75,7 +75,7 @@ CREATE TABLE Panneau_Marque(
 ------------------------------------------------------------
 
 CREATE TABLE Panneau_Modele(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nom Varchar (50) NOT NULL
 );
 
@@ -85,7 +85,7 @@ CREATE TABLE Panneau_Modele(
 ------------------------------------------------------------
 
 CREATE TABLE Panneau(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         id_Panneau_Marque INT REFERENCES Panneau_Marque(id) NOT NULL,
         id_Panneau_Modele INT REFERENCES Panneau_Modele(id) NOT NULL
 );
@@ -96,7 +96,7 @@ CREATE TABLE Panneau(
 ------------------------------------------------------------
 
 CREATE TABLE Ondulateur_Marque(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nom Varchar (50) NOT NULL
 );
 
@@ -106,7 +106,7 @@ CREATE TABLE Ondulateur_Marque(
 ------------------------------------------------------------
 
 CREATE TABLE Ondulateur_Modele(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         nom Varchar (50) NOT NULL
 );
 
@@ -116,7 +116,7 @@ CREATE TABLE Ondulateur_Modele(
 ------------------------------------------------------------
 
 CREATE TABLE Ondulateur(
-        id AUTO_INCREMENT PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         id_Ondulateur_Modele INT REFERENCES Ondulateur_Modele(id) NOT NULL,
         id_Ondulateur_Marque INT REFERENCES Ondulateur_Marque(id) NOT NULL
 );
@@ -127,7 +127,7 @@ CREATE TABLE Ondulateur(
 ------------------------------------------------------------
 
 CREATE TABLE Installeur(
-        id               AUTO_INCREMENT PRIMARY KEY,
+        id               INT AUTO_INCREMENT PRIMARY KEY,
         nom              Varchar (100) NOT NULL
 );
 
@@ -137,7 +137,7 @@ CREATE TABLE Installeur(
 ------------------------------------------------------------
 
 CREATE TABLE Documentation(
-        id                  AUTO_INCREMENT PRIMARY KEY,
+        id                  INT AUTO_INCREMENT PRIMARY KEY,
         date                Date NOT NULL ,
         lat                 Float NOT NULL ,
         long                Float NOT NULL ,
@@ -161,6 +161,6 @@ CREATE TABLE Documentation(
 ------------------------------------------------------------
 
 CREATE TABLE Installation(
-        id               AUTO_INCREMENT PRIMARY KEY,
+        id               INT AUTO_INCREMENT PRIMARY KEY,
         iddoc INT REFERENCES Documentation(id) NOT NULL
 );
