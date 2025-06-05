@@ -1,3 +1,10 @@
+<?php
+if (!isset($_GET['id'])) {
+    header('Location: recherche_developeur.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -38,7 +45,7 @@
             </a>
         </div>
         <h2 class="text-center mb-4">Modification de l'installation</h2>
-        <form method="post" action="traitement_modification.php">
+        <form method="put" action="request.php">
             <div class="row g-3">
                 <!-- Date -->
                 <div class="col-md-6">
