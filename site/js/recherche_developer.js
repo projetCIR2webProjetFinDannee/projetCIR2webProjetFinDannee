@@ -5,7 +5,58 @@ document.addEventListener('DOMContentLoaded', function() {
             el.style.animationDelay = `${index * 0.2}s`;
         });
     }, 100);
+
+    // Charger les données des selects au chargement de la page
+    loadSelectData();
 });
+
+// Fonction pour charger les données des selects
+async function loadSelectData() {
+    try {
+        const response = await fetch('../back/request.php?type=select_data');
+        const data = await response.json();
+        
+        // Remplir le select des marques d'onduleurs
+        const onduleurSelect = document.getElementById('onduleur');
+        onduleurSelect.innerHTML = '<option value="all">Toutes les marques</option>';
+        data.ondulateur_brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            onduleurSelect.appendChild(option);
+        });
+
+        // Remplir le select des marques de panneaux
+        const panneauxSelect = document.getElementById('panneaux');
+        panneauxSelect.innerHTML = '<option value="all">Toutes les marques</option>';
+        data.panel_brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            panneauxSelect.appendChild(option);
+        });
+
+        // Remplir le select des départements
+        const departementSelect = document.getElementById('departement');
+        departementSelect.innerHTML = '<option value="all">Tous les départements</option>';
+        data.departments.forEach(dept => {
+            const option = document.createElement('option');
+            option.value = dept.code;
+            option.textContent = `${dept.code} - ${dept.nom}`;
+            departementSelect.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des données des selects:', error);
+        
+        // Afficher un message d'erreur dans les selects
+        const selects = ['onduleur', 'panneaux', 'departement'];
+        selects.forEach(selectId => {
+            const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Erreur de chargement</option>';
+        });
+    }
+}
 
 // Search form handler
 document.getElementById('searchForm').addEventListener('submit', function(e) {
@@ -61,7 +112,7 @@ function updateResults(onduleur, panneaux, departement) {
                 idList.map(async (id) => {
                     try {
                         // Correction de l'URL pour récupérer les détails
-                        const res = await fetch(`request.php?type=info&id=${id}`);
+                        const res = await fetch(`../back/request.php?type=info&id=${id}`);
                         const data = await res.json();
                         return {
                             id: id,
@@ -100,7 +151,7 @@ function updateResults(onduleur, panneaux, departement) {
                         <small>Modifier</small>
                     </button>
                     </a>
-                    <button class="btn btn-danger btn-lg me-2" onclick="supprimerInstallation(this)" style="background-color: #dc3545; border-color: #dc3545; color: white;">
+                    <button class="btn btn-danger btn-lg me-2" onclick="event.stopPropagation(); supprimerInstallation(${data.id})" style="background-color: #dc3545; border-color: #dc3545; color: white;">
                         <small>Supprimer</small>
                     </button>
                     <i class="bi bi-chevron-right text-muted"></i>
@@ -108,14 +159,18 @@ function updateResults(onduleur, panneaux, departement) {
             `;
             
             container.appendChild(resultItem);
-            
-            // Animate appearance
-            setTimeout(() => {
-                resultItem.style.transition = 'all 0.5s ease';
-                resultItem.style.opacity = '1';
-                resultItem.style.transform = 'translateY(0)';
-            }, index * 200);
-        });
+
+                // Animate appearance
+                setTimeout(() => {
+                    resultItem.style.transition = 'all 0.5s ease';
+                    resultItem.style.opacity = '1';
+                    resultItem.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        })
+        .catch(error => {
+            container.innerHTML = '<div class="alert alert-danger">Erreur lors de la récupération des résultats.</div>';
+            console.error('Erreur lors de la recherche:', error);
         });
 }
 
@@ -143,19 +198,40 @@ function modifierInstallation(button) {
 }
 
 // Fonction pour gérer la suppression
-function supprimerInstallation(button) {
+function supprimerInstallation(id) {
     console.log('Supprimer installation');
     // Empêcher la propagation pour éviter de déclencher selectResult
     event.stopPropagation();
-    
+
     if (confirm('Êtes-vous sûr de vouloir supprimer cette installation ?')) {
-        const resultItem = button.closest('.result-item');
-        resultItem.style.transition = 'all 0.3s ease';
-        resultItem.style.opacity = '0';
-        resultItem.style.transform = 'translateX(-100%)';
-        
-        setTimeout(() => {
-            resultItem.remove();
-        }, 300);
+        fetch(`../back/request.php?id=${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Animation de disparition
+                const resultItem = Array.from(document.querySelectorAll('.result-item')).find(item => {
+                    // On cherche l'élément qui contient le bouton cliqué
+                    const btn = item.querySelector('button.btn-danger');
+                    return btn && btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`supprimerInstallation(${id})`);
+                });
+                if (resultItem) {
+                    resultItem.style.transition = 'opacity 0.5s, transform 0.5s';
+                    resultItem.style.opacity = '0';
+                    resultItem.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        resultItem.remove();
+                    }, 500);
+                }
+                console.log('Installation supprimée avec succès');
+            } else {
+                console.error('Erreur lors de la suppression de l\'installation');
+                alert('Erreur lors de la suppression de l\'installation.');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de réseau lors de la suppression:', error);
+            alert('Erreur de réseau lors de la suppression de l\'installation.');
+        });
     }
 }

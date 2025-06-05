@@ -133,7 +133,7 @@ function db_getAllDocuIds($conn, $ondulatorBrand, $panelBrand, $dep, $page): arr
         $wherePlaced = true;
     }
     // Limit the number of rows
-    $req .= " LIMIT 20 OFFSET ".(($page-1)*20).";";
+    $req .= " LIMIT 100 OFFSET ".(($page-1)*20).";";
 
     $stmt = $conn->prepare($req);
 
@@ -425,7 +425,7 @@ function db_deleteDoc($conn, $iddoc) {
     $stmt->bindParam(':iddoc', $iddoc);
     $stmt->execute();
 
-    $stmt = $conn->prepare('DELETE FROM Documentation WHERE iddoc=:iddoc');
+    $stmt = $conn->prepare('DELETE FROM Documentation WHERE id=:iddoc');
     $stmt->bindParam(':iddoc', $iddoc);
     $stmt->execute();
 }

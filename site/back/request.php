@@ -169,6 +169,7 @@ else if ($method == 'DELETE') {
     if (isset($_GET['id'])) {
         db_deleteDoc($conn, $_GET['id']);
         http_response_code(200);
+        exit;
     }
     else {
         requestError();
