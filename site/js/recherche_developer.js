@@ -78,6 +78,11 @@ function performSearch() {
     const panneaux = document.getElementById('panneaux').value;
     const departement = document.getElementById('departement').value;
 
+    // cache le chargement
+    searchText.style.display = 'inline';
+    loadingSpinner.style.display = 'none';
+    searchBtn.disabled = false;
+
     updateResults(onduleur, panneaux, departement);
 }
 

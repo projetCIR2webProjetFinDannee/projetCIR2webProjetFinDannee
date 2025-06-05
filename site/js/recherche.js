@@ -78,6 +78,11 @@ function performSearch() {
     const panneaux = document.getElementById('panneaux').value;
     const departement = document.getElementById('departement').value;
 
+    // cache le chargement
+    searchText.style.display = 'inline';
+    loadingSpinner.style.display = 'none';
+    searchBtn.disabled = false;
+        
     updateResults(onduleur, panneaux, departement);
 }
 
@@ -142,7 +147,7 @@ function updateResults(onduleur, panneaux, departement) {
 
                 container.appendChild(resultItem);
 
-                // ajouter une animation d'entrée
+                // animation d'entrée
                 setTimeout(() => {
                     resultItem.style.transition = 'all 0.5s ease';
                     resultItem.style.opacity = '1';
@@ -162,7 +167,7 @@ function selectResult(element) {
         item.classList.remove('selected');
     });
     
-    // ajouter la classe selected à l'élément cliqué
+    // ajouter la classe 'selected' à l'élément cliqué
     element.classList.add('selected');
     
     setTimeout(() => {
@@ -323,7 +328,7 @@ function hideDetailPage() {
     document.querySelector('.footer-custom').style.display = 'block';
 }
 
-// ajouter un écouteur d'événement pour les liens d'ancrage
+// Add smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
