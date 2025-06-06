@@ -16,6 +16,27 @@ function dbConnect() {
     return $conn;
 }
 
+function getSQLRandom($driver) {
+    switch($driver) {
+        case 'sqlite':
+            $randomFunc = 'RANDOM()';
+            break;
+        case 'mysql':
+            $randomFunc = 'RAND()';
+            break;
+        case 'pgsql':
+            $randomFunc = 'RANDOM()';
+            break;
+        case 'sqlsrv':
+        case 'dblib':
+            $randomFunc = 'NEWID()';
+            break;
+        default:
+            $randomFunc = 'RANDOM()';       // Cas par défaut
+    }
+    return $randomFunc;
+}
+
 // Donne le nombre d'installations
 function db_getNbInstallations($conn) {
     $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Installation;');
@@ -254,7 +275,8 @@ function db_getAllLocs($conn, $dep=null, $year=null) {
  * Récupère les 20 premières marques d'onduleurs
  */
 function db_getOndulatorBrands($conn, $limit = 20) {
-    $stmt = $conn->prepare('SELECT nom FROM Ondulateur_Marque ORDER BY RANDOM() LIMIT :limit');
+    $randomFunc = getSQLRandom(DB_DRIVER);
+    $stmt = $conn->prepare("SELECT nom FROM Ondulateur_Marque ORDER BY {$randomFunc} LIMIT :limit");
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -265,7 +287,8 @@ function db_getOndulatorBrands($conn, $limit = 20) {
  * Récupère les 20 premières marques de panneaux
  */
 function db_getPanelBrands($conn, $limit = 20) {
-    $stmt = $conn->prepare('SELECT nom FROM Panneau_Marque ORDER BY RANDOM() LIMIT :limit');
+    $randomFunc = getSQLRandom(DB_DRIVER);
+    $stmt = $conn->prepare("SELECT nom FROM Panneau_Marque ORDER BY {$randomFunc} LIMIT :limit");
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -276,7 +299,8 @@ function db_getPanelBrands($conn, $limit = 20) {
  * Récupère 20 départements au hasard
  */
 function db_getRandomDepartments($conn, $limit = 20) {
-    $stmt = $conn->prepare('SELECT code, nom FROM Departement ORDER BY RANDOM() LIMIT :limit');
+    $randomFunc = getSQLRandom(DB_DRIVER);
+    $stmt = $conn->prepare("SELECT code, nom FROM Departement ORDER BY {$randomFunc} LIMIT :limit");
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
