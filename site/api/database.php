@@ -320,7 +320,7 @@ function db_getSelectData($conn) {
 
 // Retourne true si la commune avec le code INSEE donné existe, false sinon
 function db_CommuneExists($conn, $insee): bool {
-    $stmt = $conn->prepare('SELECT count(code_insee) FROM Commune WHERE code_insee=:insee;');
+    $stmt = $conn->prepare('SELECT count(code_insee) AS "count" FROM Commune WHERE code_insee=:insee;');
     $stmt->bindParam(':insee', $insee);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -329,7 +329,7 @@ function db_CommuneExists($conn, $insee): bool {
 
 // Retourne true si la documentation avec l'identifiant donné existe, false sinon
 function db_DocExists($conn, $iddoc): bool {
-    $stmt = $conn->prepare('SELECT count(id) FROM Documentation WHERE id=:iddoc');
+    $stmt = $conn->prepare('SELECT count(id) AS "count" FROM Documentation WHERE id=:iddoc');
     $stmt->bindParam(':iddoc', $iddoc);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
