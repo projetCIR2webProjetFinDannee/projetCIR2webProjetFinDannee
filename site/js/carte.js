@@ -79,7 +79,7 @@ async function rechercherInstallations() {
         markersGroup.clearLayers();
 
         // Récupère directement les installations filtrées via l'API
-        const locationsResponse = await fetch(`../api/api.php?type=locations&departement=${departement}&annee=${annee}`);
+        const locationsResponse = await fetch(`../api/request.php?type=locations&departement=${departement}&annee=${annee}`);
         
         if (!locationsResponse.ok) {
             throw new Error('Erreur lors de la recherche');

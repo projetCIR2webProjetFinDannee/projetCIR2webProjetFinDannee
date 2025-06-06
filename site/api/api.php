@@ -67,18 +67,7 @@ if ($method == 'GET') {
                 requestError();
             }
         }
-        // Nouvelle route pour récupérer les installations par carte
-        else if ($_GET['type'] == 'locations') {
-            $dep = isset($_GET['departement']) ? $_GET['departement'] : null;
-            $year = isset($_GET['annee']) ? $_GET['annee'] : null;
-            
-            $locations = db_getAllLocs($conn, $dep, $year);
-            echo json_encode(['locations' => $locations]);
-            exit;
-        }
-        else {
-            requestError();
-        }
+        
     }
     else {
         requestError();
