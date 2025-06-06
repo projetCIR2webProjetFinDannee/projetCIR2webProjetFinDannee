@@ -351,8 +351,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 async function generatePDF(installationId) {
     // Vérifier si jsPDF est disponible
     if (typeof window.jspdf === 'undefined') {
-        alert('La bibliothèque jsPDF n\'est pas chargée. Veuillez vérifier que le script est inclus dans votre page.');
-        return;
+        await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
     }
 
     const { jsPDF } = window.jspdf;
