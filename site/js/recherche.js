@@ -140,6 +140,13 @@ function updateResults(onduleur, panneaux, departement) {
                         <div class="flex-grow-1">
                             <strong>${data.title}</strong><br>
                             <small class="text-muted">${data.details}</small>
+                            <span class="small">
+                                ${data.fullData && data.fullData.date ? new Date(data.fullData.date).toLocaleDateString('fr-FR') : ''}
+                                ${data.fullData && data.fullData.nb_panneaux ? ' | ' + data.fullData.nb_panneaux + ' panneaux' : ''}
+                                ${data.fullData && data.fullData.surface ? ' | ' + data.fullData.surface + ' m²' : ''}
+                                ${data.fullData && data.fullData.puissance_crete ? ' | ' + data.fullData.puissance_crete + ' kW' : ''}
+                                ${data.fullData && data.fullData.commune ? ' | ' + data.fullData.commune : ''}
+                            </span>
                         </div>
                         <i class="bi bi-chevron-right text-muted"></i>
                     </div>
