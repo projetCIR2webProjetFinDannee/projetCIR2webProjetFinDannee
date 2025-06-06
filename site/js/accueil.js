@@ -66,36 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Fonction pour tester la connectivité de l'API
-    async function testerAPI() {
-        console.log('🧪 Test de connectivité de l\'API...');
-        
-        try {
-            // Test simple sans paramètres
-            const response = await fetch(API_URL);
-            const text = await response.text();
-            
-            console.log('🔬 Test de base - Status:', response.status);
-            console.log('🔬 Test de base - Réponse:', text.substring(0, 100));
-            
-            if (response.status === 404) {
-                console.error('❌ L\'API n\'existe pas à cette adresse');
-                return false;
-            }
-            
-            if (response.status >= 500) {
-                console.error('❌ Erreur serveur (500+)');
-                return false;
-            }
-            
-            return true;
-            
-        } catch (error) {
-            console.error('❌ Impossible de joindre l\'API:', error);
-            return false;
-        }
-    }
-    
     // Fonction pour animer les chiffres
     function animerChiffre(element, valeurFinale, duree = 1500) {
         if (!valeurFinale || isNaN(valeurFinale)) {
@@ -159,12 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
             afficherSpinner(el);
         });
         
-        // Tester l'API d'abord
-        const apiOK = await testerAPI();
-        if (!apiOK) {
-            afficherErreur('API inaccessible');
-            return;
-        }
         
         // Charger et afficher les données
         const donnees = await chargerDonnees(year, region);
