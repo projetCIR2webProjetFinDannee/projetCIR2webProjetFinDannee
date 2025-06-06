@@ -1,20 +1,24 @@
 :root {
+    /* Définition des couleurs principales utilisées dans le site */
     --primary-color: #28C1B9;
     --secondary-color: #26c6da;
     --tertiary-color: #00acc1;
 }
 
 .navbar-custom {
+    /* Barre de navigation avec un dégradé de couleurs et une ombre portée */
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .navbar-brand {
+    /* Style du nom de la marque dans la navbar */
     font-weight: bold;
     font-size: 1.2rem;
 }
 
 .navbar-nav .nav-link {
+    /* Style des liens de navigation */
     font-weight: 500;
     text-transform: uppercase;
     font-size: 0.9rem;
@@ -24,17 +28,20 @@
 }
 
 .navbar-nav .nav-link:hover {
+    /* Effet au survol des liens de navigation */
     background-color: rgba(255,255,255,0.2);
     transform: translateY(-2px);
 }
 
 .footer-custom {
+    /* Pied de page avec le même dégradé que la navbar */
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
     color: white;
     margin-top: 50px;
 }
 
 .footer-custom a {
+    /* Style des liens dans le pied de page */
     color: rgba(255,255,255,0.9);
     text-decoration: none;
     font-size: 0.85rem;
@@ -43,6 +50,7 @@
 }
 
 .footer-custom a:hover {
+    /* Effet au survol des liens du pied de page */
     color: white;
     text-decoration: underline;
 }
