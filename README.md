@@ -18,24 +18,48 @@ Ce projet est un site web développé dans le cadre du module CIR2 de fin d'ann�
 
 - HTML, CSS, JavaScript
 - PHP
-- MySQL
+- MySQL, postgres
 
 ## Installation
 
 1. Cloner le dépôt :
-    ```bash
     git clone https://github.com/votre-utilisateur/projetCIR2webProjetFinDannee.git
-    ```
-2. Placer les fichiers dans le dossier `/var/www/html/`.
-3. Configurer la base de données MySQL avec le script fourni.
-4. Modifier les paramètres de connexion à la base de données dans le fichier de configuration.
+2. Placer les fichiers dans le dossier `/var/www/html/projetCIR2webProjetFinDannee`.
+3. Créer la base de données SQL sur votre driver.
+4. Exécuter les scripts du dossier sql pour construire la base de données.
+    Éxécuter `sql/{driver}/model.sql`
+    Éxécuter `sql/data.sql`
+    Éxécuter `sql/{driver}/increment-fixer.sql`
+5. Copier le fichier de configuration d'exemple vers `back/constants.php`, et modifier le fichier selon votre configuration
+
+## Configuration serveur (Apache2)
+1. Activer les modules nécessaires
+    `a2enmod auth_digest`
+    `systemctl restart apache2`
+2. Créer un fichier de mot de passe avec htdigest
+    Éxécuter: `htdigest -c /etc/apache2/.htdigest "Secure admin access" utilisateur`
+    Le paramètre -c n'est à utiliser que lors de la création du fichier
+    Il faut remplacer 'utilisateur' par votre login
+    Le système vous demandera ensuite un mot de passe.
+3. Créer une nouvelle configuration apache
+    `cd /etc/apache2/sites-available`
+    `cp 000-default.conf solarpanel.conf`
+4. Changer la nouvelle configuration apache
+    `nano solarpanel.conf`
+    Ajouter au fichier ouvert la configuration indiquée dans le fichier `config.example`
+5. Activer la configuration apache
+    `a2ensite solarpanel.conf`
+    `a2dissite 000-default.conf`
+6. Redémarrer apache
+    `systemctl restart apache2`
 
 ## Utilisation
 
-Accédez au site via `http://10.10.51.129/` les logins pour la partie serveur sont 'admin' avec le mot de passe 'Isen44' et un mot de passe en front '123'.
+Le site est déjà configuré à l'adresse `http://10.10.51.129/`. Les logins pour la partie serveur sont 'admin' avec le mot de passe 'Isen44' et un mot de passe en front '123'.
 
 ## Auteurs
 
+Groupe 9
 - Alexis ROCHON--SANZ
 - Mathieu GICQUEL--BOURDEAU
 - Mathis CHARTIER

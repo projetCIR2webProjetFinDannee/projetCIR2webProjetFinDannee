@@ -1,0 +1,24 @@
+DocumentRoot /var/www/html/projetCIR2webProjetFinDannee/site/front
+Alias /front /var/www/html/projetCIR2webProjetFinDannee/site/front
+Alias /back /var/www/html/projetCIR2webProjetFinDannee/site/back
+Alias /js /var/www/html/projetCIR2webProjetFinDannee/site/js
+Alias /css /var/www/html/projetCIR2webProjetFinDannee/site/css
+Alias /images /var/www/html/projetCIR2webProjetFinDannee/site/images
+Alias /api /var/www/html/projetCIR2webProjetFinDannee/site/api
+Alias /icons /var/www/html/projetCIR2webProjetFinDannee/site/icons
+
+<Directory /var/www/html/projetCIR2webProjetFinDannee/site>
+    Options -Indexes
+</Directory>
+<Directory /var/www/html/projetCIR2webProjetFinDannee/site/front>
+    DirectoryIndex accueil.php
+</Directory>
+<Directory /var/www/html/projetCIR2webProjetFinDannee/site/back>
+    DirectoryIndex login.php
+
+    AuthType Digest
+    AuthName "Secure admin access"
+    AuthDigestProvider file
+    AuthUserFile /etc/apache2/.htdigest
+    Require valid-user
+</Directory>
