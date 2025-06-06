@@ -173,21 +173,20 @@ else if ($method == 'PUT') {
               $_GET['marquePanneaux'], $_GET['modelePanneaux'], $_GET['installateur'], $_GET['prod_pvgis'])) 
     {
         try {
-            // Define optimum inclination
+            // Definir la pente optimum
             $incl_opti = null;
             if (isset($_GET['inclinaison_opti']) && !empty($_GET['inclinaison_opti'])) {
                 $incl_opti = intval($_GET['inclinaison_opti']);
             }
 
-            // Define optimum orientation  
+            // Definir l'orientation optimum
             $orient_opti = null;
             if (isset($_GET['orientation_opti']) && !empty($_GET['orientation_opti'])) {
                 $orient_opti = $_GET['orientation_opti'];
             }
 
-            // CORRECTION : Ajouter l'ID comme premier paramètre
             $result = db_putInstallation($conn, 
-                $_GET['id'], // ID manquant dans votre code original
+                $_GET['id'],
                 $_GET['date'], 
                 $_GET['insee'], 
                 floatval($_GET['latitude']),
@@ -211,17 +210,18 @@ else if ($method == 'PUT') {
             if ($result) {
                 http_response_code(200);
                 echo json_encode(["success" => true, "message" => "Installation modifiée avec succès"]);
+                exit;
             } else {
-                http_response_code(500);
                 echo json_encode(["success" => false, "message" => "Erreur lors de la modification"]);
+                serverError();
             }
         }
         catch (Exception $e) {
             serverError();
         }
     } else {
-        http_response_code(400);
         echo json_encode(["success" => false, "message" => "Paramètres manquants"]);
+        requestError();
     }
 }
 
